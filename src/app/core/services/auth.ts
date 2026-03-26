@@ -111,7 +111,7 @@ export class AuthService {
     role?: string;
   }): Promise<AuthResult> {
     try {
-      const response = await this.api.post<{ retryAfterSeconds?: number }>(
+      const response = await this.api.post<{ retryAfterSeconds?: number; otp?: string }>(
         '/auth/register',
         {
           name: userData.name.trim(),
@@ -173,7 +173,7 @@ export class AuthService {
     role?: string;
   }): Promise<AuthResult> {
     try {
-      const response = await this.api.post<{ retryAfterSeconds?: number }>(
+      const response = await this.api.post<{ retryAfterSeconds?: number; otp?: string }>(
         '/auth/resend-otp',
         {
         name: payload.name?.trim(),
@@ -198,10 +198,13 @@ export class AuthService {
 
   async forgotPassword(email: string, role?: string): Promise<AuthResult> {
     try {
-      const response = await this.api.post<any>('/auth/forgot-password', {
+      const response = await this.api.post<{ retryAfterSeconds?: number; otp?: string }>(
+        '/auth/forgot-password',
+        {
         email: email.toLowerCase().trim(),
         role: role?.trim(),
-      });
+        }
+      );
       return {
         success: true,
         message: response.message || 'OTP sent to your email.',
