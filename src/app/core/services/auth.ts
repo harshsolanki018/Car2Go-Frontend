@@ -18,6 +18,7 @@ interface AuthResult {
   requiresOtp?: boolean;
   remainingResends?: number;
   retryAfterSeconds?: number;
+  debugOtp?: string;
 }
 
 @Injectable({
@@ -126,6 +127,7 @@ export class AuthService {
         message: response.message || 'OTP sent to your email.',
         requiresOtp: true,
         retryAfterSeconds: response.data?.retryAfterSeconds,
+        debugOtp: response.data?.otp,
       };
     } catch (error) {
       return {
@@ -184,6 +186,7 @@ export class AuthService {
         success: true,
         message: response.message || 'OTP resent.',
         retryAfterSeconds: response.data?.retryAfterSeconds,
+        debugOtp: response.data?.otp,
       };
     } catch (error) {
       return {
@@ -203,6 +206,7 @@ export class AuthService {
         success: true,
         message: response.message || 'OTP sent to your email.',
         retryAfterSeconds: response.data?.retryAfterSeconds,
+        debugOtp: response.data?.otp,
       };
     } catch (error) {
       return {

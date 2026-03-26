@@ -106,6 +106,9 @@ export class Register implements OnDestroy {
 
       if (result.requiresOtp) {
         this.otpSent = true;
+        if (result.debugOtp) {
+          this.otp = result.debugOtp;
+        }
         this.startResendCountdown(result.retryAfterSeconds ?? 60);
         this.setSuccess(result.message);
         return;
@@ -165,6 +168,10 @@ export class Register implements OnDestroy {
       if (!result.success) {
         this.setError(result.message);
         return;
+      }
+
+      if (result.debugOtp) {
+        this.otp = result.debugOtp;
       }
 
       this.startResendCountdown(result.retryAfterSeconds ?? 60);
