@@ -1,0 +1,443 @@
+﻿
+
+<!-- HERO (CONSISTENT ACROSS DEVICES) -->
+<section class="bg-background">
+  <div
+    class="
+      max-w-7xl mx-auto
+      px-4 sm:px-6
+      pt-12 pb-16
+      lg:py-24
+      grid grid-cols-1 lg:grid-cols-2
+      gap-10 lg:gap-16
+      items-center animate-fade-up
+    "
+  >
+    <!-- TEXT -->
+    <div>
+      <h1
+        class="
+          text-3xl
+          sm:text-4xl
+          lg:text-5xl
+          font-bold
+          text-primary
+          leading-tight
+        "
+      >
+        Find the <br />
+        Perfect Car <br />
+        for <span class="text-accent">Your Trip</span>
+      </h1>
+
+      <p
+        class="
+          mt-4 sm:mt-6
+          text-muted
+          text-base sm:text-lg
+          max-w-lg
+        "
+      >
+        {{ heroDescription }}
+      </p>
+
+      <div class="mt-6 sm:mt-8">
+        <button
+          class="
+            bg-accent
+            text-white
+            px-6 py-3
+            rounded-md
+            text-sm font-medium btn-animate
+
+          "
+          [routerLink]="heroButtonLink"
+        > 
+          {{ heroButtonText }}
+        </button>
+      </div>
+    </div>
+
+    <!-- IMAGE -->
+    <div class="flex justify-center lg:justify-end animate-fade-up">
+      <img
+        src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2"
+        alt="Car2Go vehicle"
+        class="
+          w-full
+          max-w-[600px]
+          aspect-[16/9]
+          object-cover
+          rounded-2xl
+          shadow-xl
+        "
+      />
+    </div>
+  </div>
+</section>
+
+<!-- STATUS BAR (RENTAL LANDING PAGE) -->
+<section class="bg-primary text-white animate-fade-up">
+  <div
+    class="
+      max-w-7xl mx-auto
+      px-4 sm:px-6
+      py-10 sm:py-12
+      grid grid-cols-2 lg:grid-cols-4
+      gap-y-8 gap-x-6
+      text-center
+    "
+  >
+    <div
+      *ngFor="let stat of statusBarStats; trackBy: trackByStatLabel"
+      class="animate-fade"
+    >
+      <h3 class="text-2xl sm:text-3xl font-bold">
+        {{ stat.value }}+
+      </h3>
+      <p class="text-xs sm:text-sm opacity-80 mt-1">
+        {{ stat.label }}
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- VEHICLE RENTAL SECTION -->
+<section class="bg-background">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-10">
+      <h2 class="text-2xl font-bold text-primary animate-fade-up">
+        Available Cars for Rent
+      </h2>
+
+      <a
+        [routerLink]="browseCarsLink"
+        class="hidden sm:flex items-center gap-1 text-accent text-sm font-medium animate-fade-up"
+      >
+        {{ isLoggedIn ? 'View All' : 'Login to View' }}
+      </a>
+    </div>
+
+    <!-- Grid -->
+    <div
+      *ngIf="homeCars.length > 0; else noCarsBlock"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 animate-fade-up"
+    >
+      <div
+        *ngFor="let car of homeCars"
+        class="bg-white rounded-xl overflow-hidden border shadow-sm"
+      >
+        <div class="relative">
+          <img
+            [src]="(car.image | secureUrl) || 'https://via.placeholder.com/800x500'"
+            class="w-full h-[220px] object-cover"
+            [alt]="car.name"
+          />
+        </div>
+
+        <div class="p-5">
+          <h3 class="font-semibold text-primary">
+            {{ car.name }}
+          </h3>
+
+          <p class="text-sm text-muted mt-1">
+            {{ car.fuelType }} | {{ car.transmission }} | {{ car.seats }} Seats
+          </p>
+
+          <div class="mt-4 flex justify-between items-center">
+            <span class="font-bold text-primary">
+              Rs. {{ car.pricePerDay }} / day
+            </span>
+
+            <a
+              [routerLink]="carCardLink(car.id)"
+              class="text-accent text-sm font-medium"
+            >
+              {{ rentNowText }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <ng-template #noCarsBlock>
+      <div class="text-center py-12 text-muted">
+        No available cars to show right now.
+      </div>
+    </ng-template>
+
+    <!-- Mobile CTA -->
+    <div class="mt-10 sm:hidden text-center">
+      <a
+        [routerLink]="browseCarsLink"
+        class="inline-block bg-accent text-white px-6 py-3 rounded-md text-sm font-medium btn-animate
+"
+      >
+        {{ isLoggedIn ? 'View All Cars' : 'Login to View Cars' }} 
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHAT WE PROVIDE -->
+<section class="bg-background">
+  <div
+    class="
+      max-w-7xl mx-auto
+      px-4 sm:px-6
+      py-16 sm:py-20
+    "
+  >
+    <!-- Section Header -->
+    <div class="text-center mb-12 sm:mb-16 animate-fade-up">
+      <h2 class="text-2xl sm:text-3xl font-bold text-primary">
+        What We Provide
+      </h2>
+      <p class="mt-3 text-muted text-sm sm:text-base max-w-2xl mx-auto">
+        Car2Go offers everything you need for a smooth, reliable, and affordable
+        car rental experience.
+      </p>
+    </div>
+
+    <!-- Cards -->
+    <div
+      class="
+        grid grid-cols-1
+        sm:grid-cols-2
+        lg:grid-cols-4
+        gap-8 animate-fade-up
+      "
+    >
+      <!-- Card 1 -->
+      <div class="bg-white border rounded-xl p-6 text-center">
+        <div
+          class="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-primary/10 text-primary mb-4"
+        >
+          <fa-icon [icon]="faCar" />
+        </div>
+        <h3 class="font-semibold text-primary mb-2">
+          Wide Range of Cars
+        </h3>
+        <p class="text-sm text-muted">
+          From compact cars to premium SUVs, choose vehicles that fit your needs
+          and budget.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bg-white border rounded-xl p-6 text-center">
+        <div
+          class="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-primary/10 text-primary mb-4"
+        >
+          <fa-icon [icon]="faSackDollar" />
+        </div>
+        <h3 class="font-semibold text-primary mb-2">
+          Affordable Pricing
+        </h3>
+        <p class="text-sm text-muted">
+          Transparent rental prices with no hidden charges or surprise fees.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-white border rounded-xl p-6 text-center">
+        <div
+          class="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-primary/10 text-primary mb-4"
+        >
+          <fa-icon [icon]="faStopwatch" />
+        </div>
+        <h3 class="font-semibold text-primary mb-2">
+          Flexible Rentals
+        </h3>
+        <p class="text-sm text-muted">
+          Rent cars by the day or hour with flexible pickup and return options.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bg-white border rounded-xl p-6 text-center">
+        <div
+          class="w-12 h-12 mx-auto flex items-center justify-center rounded-full bg-primary/10 text-primary mb-4"
+        >
+          <fa-icon [icon]="faScrewdriver" />
+        </div>
+        <h3 class="font-semibold text-primary mb-2">
+          Well-Maintained Cars
+        </h3>
+        <p class="text-sm text-muted">
+          All vehicles are regularly serviced and cleaned for your safety and
+          comfort.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<section class="bg-section animate-fade-up">
+  <div class="max-w-7xl mx-auto px-6 py-24">
+    <h2 class="text-2xl font-bold mb-12">
+      We're BIG on what matters to you
+    </h2>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div>
+        <h4 class="font-semibold mb-2">Wide Selection</h4>
+        <p class="text-sm text-muted">
+          Find the right car for every journey.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">Transparent Pricing</h4>
+        <p class="text-sm text-muted">
+          No hidden costs, ever.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">24/7 Support</h4>
+        <p class="text-sm text-muted">
+          Assistance whenever you need it.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="font-semibold mb-2">Easy & Fast</h4>
+        <p class="text-sm text-muted">
+          Book your ride in minutes.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="bg-background animate-fade">
+  <div class="max-w-7xl mx-auto px-6 py-24">
+    <h2 class="text-2xl font-bold mb-12">How Car2Go Works</h2>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="border rounded-xl p-6">
+        <p class="text-xs font-semibold text-accent tracking-wide">STEP 1</p>
+        <p class="mt-3 text-sm text-muted">
+          Browse available cars, compare price, fuel type, and seating.
+        </p>
+        <p class="mt-4 font-semibold">Choose Your Car</p>
+      </div>
+
+      <div class="border rounded-xl p-6">
+        <p class="text-xs font-semibold text-accent tracking-wide">STEP 2</p>
+        <p class="mt-3 text-sm text-muted">
+          Select pickup and return dates, then submit your booking request.
+        </p>
+        <p class="mt-4 font-semibold">Book in Minutes</p>
+      </div>
+
+      <div class="border rounded-xl p-6">
+        <p class="text-xs font-semibold text-accent tracking-wide">STEP 3</p>
+        <p class="mt-3 text-sm text-muted">
+          Track booking status and enjoy a smooth, reliable rental experience.
+        </p>
+        <p class="mt-4 font-semibold">Ride with Confidence</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAR2GO PARTNERS -->
+<section *ngIf="!isLoggedIn" class="bg-background animate-fade-up">
+  <div class="max-w-7xl mx-auto px-6 pb-24">
+    <div
+      class="rounded-2xl border border-gray-200 bg-gradient-to-r from-section to-white p-8 sm:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"
+    >
+      <div>
+        <p class="text-xs font-semibold tracking-wide uppercase text-accent">
+          Car2Go Partners
+        </p>
+        <h2 class="mt-2 text-2xl sm:text-3xl font-bold text-primary">
+          Earn With Your Car
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-muted max-w-2xl">
+          Turn your parked car into monthly income. List it on Car2Go and receive verified bookings from renters near you.
+        </p>
+      </div>
+
+      <div class="shrink-0">
+        <a
+          routerLink="/owner"
+          class="inline-flex items-center justify-center bg-accent text-white px-6 py-3 rounded-md text-sm font-medium hover:opacity-90 btn-animate"
+        >
+          Become a Partner
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="bg-primary text-white ">
+  <div
+    class="
+      max-w-7xl mx-auto
+      px-4 sm:px-6
+      py-16 sm:py-20
+      text-center
+    "
+  >
+    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold">
+      {{ isLoggedIn ? 'Ready for Your Next Ride?' : 'Ready to Start Your Journey?' }}
+    </h2>
+
+    <p
+      class="
+        mt-4
+        text-sm sm:text-base
+        opacity-80
+        max-w-2xl
+        mx-auto
+      "
+    >
+      {{ isLoggedIn
+        ? 'Time to Travel and make Memories , Browse the best car and Explore.'
+        : 'Choose from a wide range of reliable cars and enjoy a smooth, affordable rental experience with Car2Go.' }}
+    </p>
+
+    <div class="mt-8 flex justify-center gap-4">
+      <a
+        [routerLink]="primaryBottomCtaLink"
+        class="
+          bg-accent
+          text-white
+          px-8 py-3
+          rounded-md
+          text-sm font-medium
+          hover:opacity-90 btn-animate
+
+        "
+      >
+        {{ primaryBottomCtaText }}
+      </a>
+
+      <a
+        [routerLink]="secondaryBottomCtaLink"
+        class="
+          border border-white
+          px-8 py-3
+          rounded-md
+          text-sm font-medium
+          hover:bg-white hover:text-primary btn-animate
+        "
+      >
+        {{ secondaryBottomCtaText }}
+      </a>
+    </div>
+  </div>
+</section>
+

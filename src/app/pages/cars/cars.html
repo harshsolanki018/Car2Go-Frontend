@@ -1,0 +1,229 @@
+<!-- PAGE HEADER -->
+<section class="bg-background border-b animate-fade-up">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <h1 class="text-2xl sm:text-3xl font-bold text-primary">
+      Explore Our Rental Cars
+    </h1>
+    <p class="mt-2 text-muted text-sm">
+      Browse, compare and book cars with real-time availability and ratings
+    </p>
+  </div>
+</section>
+
+<!-- SEARCH + FILTER LAYOUT -->
+<section class="bg-background animate-fade-up">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 lg:grid-cols-4 gap-10">
+    <!-- FILTER PANEL -->
+    <aside class="lg:col-span-1 space-y-6 animate-fade">
+      <!-- ENABLE FILTER TOGGLE -->
+      <div class="flex items-center justify-between">
+        <label for="carsEnableFilters" class="text-sm font-medium text-primary">
+          Enable Filters
+        </label>
+        <input
+          id="carsEnableFilters"
+          type="checkbox"
+          [(ngModel)]="enableFilters"
+          autocomplete="off"
+          class="h-4 w-4 accent-orange-500"
+        />
+      </div>
+
+      <!-- SEARCH -->
+      <div>
+        <label for="carsSearch" class="text-sm font-medium text-primary">
+          Search Car
+        </label>
+        <div class="relative mt-2">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+            <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
+          </span>
+          <input
+            id="carsSearch"
+            type="text"
+            [(ngModel)]="searchText"
+            [disabled]="!enableFilters"
+            autocomplete="off"
+            placeholder="Search by car name"
+            class="w-full pl-10 pr-4 py-3 border rounded-md text-sm focus:outline-none disabled:bg-gray-100"
+          />
+        </div>
+      </div>
+
+      <!-- LOCATION -->
+      <div>
+        <label for="carsStateFilter" class="text-sm font-medium text-primary">
+          State
+        </label>
+        <select
+          id="carsStateFilter"
+          [(ngModel)]="selectedState"
+          (ngModelChange)="onStateChange()"
+          [disabled]="!enableFilters"
+          autocomplete="off"
+          class="w-full mt-2 border rounded-md px-3 py-3 text-sm disabled:bg-gray-100"
+        >
+          <option value="all">Select State</option>
+          <option *ngFor="let state of stateOptions" [value]="state">
+            {{ state }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <label for="carsCityFilter" class="text-sm font-medium text-primary">
+          City
+        </label>
+        <select
+          id="carsCityFilter"
+          [(ngModel)]="selectedCity"
+          (ngModelChange)="onCityChange()"
+          [disabled]="!enableFilters || selectedState === 'all'"
+          autocomplete="off"
+          class="w-full mt-2 border rounded-md px-3 py-3 text-sm disabled:bg-gray-100"
+        >
+          <option value="all">Select City</option>
+          <option *ngFor="let city of cityOptions" [value]="city">
+            {{ city }}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <label for="carsAreaFilter" class="text-sm font-medium text-primary">
+          Area
+        </label>
+        <select
+          id="carsAreaFilter"
+          [(ngModel)]="selectedArea"
+          [disabled]="!enableFilters || selectedState === 'all' || selectedCity === 'all'"
+          autocomplete="off"
+          class="w-full mt-2 border rounded-md px-3 py-3 text-sm disabled:bg-gray-100"
+        >
+          <option value="all">Select Area</option>
+          <option *ngFor="let area of areaOptions" [value]="area">
+            {{ area }}
+          </option>
+        </select>
+      </div>
+
+      <!-- PRICE SLIDER -->
+      <div>
+        <label for="carsMaxPriceFilter" class="text-sm font-medium text-primary">
+          Max Price (Rs. {{ maxPrice }} / day)
+        </label>
+        <input
+          id="carsMaxPriceFilter"
+          type="range"
+          min="1000"
+          max="20000"
+          step="1"
+          [(ngModel)]="maxPrice"
+          [disabled]="!enableFilters"
+          autocomplete="off"
+          class="w-full mt-3 accent-orange-500"
+        />
+      </div>
+
+      <!-- FUEL -->
+      <div>
+        <label for="carsFuelFilter" class="text-sm font-medium text-primary">
+          Fuel Type
+        </label>
+        <select
+          id="carsFuelFilter"
+          [(ngModel)]="selectedFuel"
+          [disabled]="!enableFilters"
+          autocomplete="off"
+          class="w-full mt-2 border rounded-md px-3 py-3 text-sm disabled:bg-gray-100"
+        >
+          <option value="all">Select Fuel Type</option>
+          <option value="Petrol">Petrol</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Electric">Electric</option>
+        </select>
+      </div>
+
+      <!-- TRANSMISSION -->
+      <div>
+        <label for="carsTransmissionFilter" class="text-sm font-medium text-primary">
+          Transmission
+        </label>
+        <select
+          id="carsTransmissionFilter"
+          [(ngModel)]="selectedTransmission"
+          [disabled]="!enableFilters"
+          autocomplete="off"
+          class="w-full mt-2 border rounded-md px-3 py-3 text-sm disabled:bg-gray-100"
+        >
+          <option value="all">Select Transmission</option>
+          <option value="Automatic">Automatic</option>
+          <option value="Manual">Manual</option>
+        </select>
+      </div>
+    </aside>
+
+    <!-- CARS GRID -->
+    <div class="lg:col-span-3">
+      <div
+        *ngIf="filteredCars.length === 0"
+        class="text-center text-muted"
+      >
+        No cars match your filters.
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div
+          *ngFor="let car of filteredCars"
+          class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition"
+        >
+          <div class="relative">
+            <img
+              [src]="car.image | secureUrl"
+              class="w-full h-[220px] object-cover"
+            />
+
+          </div>
+
+          <div class="p-5">
+            <h3 class="font-semibold text-primary">
+              {{ car.name }}
+            </h3>
+
+            <p class="text-sm text-muted mt-1">
+              {{ car.fuelType }} | {{ car.transmission }} | {{ car.location }}
+            </p>
+
+            <!-- RATING -->
+            <div class="mt-2 flex items-center gap-2 text-sm">
+              <ng-container *ngIf="getCarRating(car.id).count > 0; else noRating">
+                <span class="text-yellow-500">
+                  &#9733; {{ getCarRating(car.id).avg }}
+                </span>
+                <span class="text-muted">
+                  ({{ getCarRating(car.id).count }} reviews)
+                </span>
+              </ng-container>
+              <ng-template #noRating>
+                <span class="text-muted text-xs">No ratings yet</span>
+              </ng-template>
+            </div>
+
+            <div class="mt-4 flex justify-between items-center">
+              <span class="font-bold text-primary">
+                Rs. {{ car.pricePerDay }} / day
+              </span>
+
+              <button
+                [routerLink]="['/cars', car.id]"
+                class="px-4 py-2 bg-accent text-white rounded-md text-sm font-medium hover:opacity-90"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

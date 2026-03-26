@@ -1,0 +1,57 @@
+/* stylelint-disable at-rule-no-unknown */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Home Page Animations ===== */
+
+/* Fade + slide */
+.animate-fade-up {
+  animation: fadeUp 0.8s ease-out both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slow fade */
+.animate-fade {
+  animation: fadeIn 1s ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Hover lift */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* Image zoom */
+.hover-zoom img {
+  transition: transform 0.6s ease;
+}
+.hover-zoom:hover img {
+  transform: scale(1.05);
+}
+
+/* Button smooth */
+.btn-animate {
+  transition: all 0.3s ease;
+}
+.btn-animate:hover {
+  transform: translateY(-2px);
+}

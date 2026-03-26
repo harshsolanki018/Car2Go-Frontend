@@ -1,0 +1,215 @@
+<!-- HERO -->
+<section class="bg-background">
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 py-14
+           text-center animate-fade-up"
+  >
+    <h1 class="text-3xl sm:text-4xl font-bold text-primary">
+      Contact <span class="text-accent">Car2Go</span>
+    </h1>
+
+    <p class="mt-4 text-muted max-w-2xl mx-auto">
+      Have questions or need help? We’re here to assist you.
+      Reach out to us anytime.
+    </p>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section class="bg-section">
+  <div
+    class="max-w-6xl mx-auto px-4 sm:px-6 py-14
+           grid grid-cols-1 lg:grid-cols-2 gap-10"
+  >
+
+    <!-- CONTACT INFO -->
+    <div class="animate-fade-up">
+      <h2 class="text-2xl font-bold text-primary">
+        Get in Touch
+      </h2>
+
+      <p class="mt-3 text-muted">
+        Whether you need support with a booking or have general inquiries,
+        our team is ready to help.
+      </p>
+
+      <div class="mt-6 space-y-4 text-sm">
+
+        <div class="flex items-start gap-3">
+          <fa-icon [icon]="faLocationArrow" class="w-5 h-5 text-accent mt-1" style="color: #111827;"></fa-icon>
+          <span>
+            <strong>Address:</strong><br />
+            Car2Go Headquarters,<br />
+            Surat, Gujarat
+          </span>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <fa-icon [icon]="faPhone" class="w-5 h-5 text-accent mt-1" style="color: #111827;"></fa-icon>
+          <span>
+            <strong>Phone:</strong><br />
+            +91 98765 43210
+          </span>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <fa-icon [icon]="faEnvelope" class="w-5 h-5 text-accent mt-1" style="color: #111827;"></fa-icon>
+          <span>
+            <strong>Email:</strong><br />
+            car2gosupports@gmail.com
+          </span>
+        </div>
+
+        <div class="flex items-start gap-3">
+          <fa-icon [icon]="faClock" class="w-5 h-5 text-accent mt-1" style="color: #111827;"></fa-icon>
+          <span>
+            <strong>Working Hours:</strong><br />
+            24/7 Customer Support
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CONTACT FORM -->
+<div
+  class="bg-white border rounded-xl p-6
+         hover-lift animate-fade-up"
+>
+  <h3 class="text-xl font-semibold text-primary mb-6">
+    Send Us a Message
+  </h3>
+
+  <form class="space-y-5" (ngSubmit)="submitMessage()" #contactForm="ngForm">
+
+    <!-- Full Name -->
+    <div>
+      <label for="contactName" class="text-sm font-medium">
+        Full Name <span class="text-red-500">*</span>
+      </label>
+      <input
+        id="contactName"
+        type="text"
+        [(ngModel)]="name"
+        name="name"
+        autocomplete="name"
+        required
+        placeholder="Virat Kohli"
+        class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-accent focus:outline-none"
+      />
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="contactEmail" class="text-sm font-medium">
+        Email Address <span class="text-red-500">*</span>
+      </label>
+      <input
+        id="contactEmail"
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        autocomplete="email"
+        required
+        placeholder="you@example.com"
+        class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-accent focus:outline-none"
+      />
+    </div>
+
+    <!-- Phone -->
+    <div>
+      <label for="contactPhone" class="text-sm font-medium">
+        Phone Number (Optional)
+      </label>
+      <input
+        id="contactPhone"
+        type="tel"
+        [(ngModel)]="phone"
+        name="phone"
+        autocomplete="tel"
+        pattern="[0-9]{10}"
+        minlength="10"
+        maxlength="10"
+        inputmode="numeric"
+        placeholder="9876543210"
+        class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-accent focus:outline-none"
+      />
+    </div>
+
+    <!-- Subject -->
+    <div>
+      <label for="contactSubject" class="text-sm font-medium">
+        Subject
+      </label>
+      <select
+        id="contactSubject"
+        [(ngModel)]="subject"
+        name="subject"
+        autocomplete="off"
+        class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-accent focus:outline-none"
+      >
+        <option value="">Select Subject</option>
+        <option value="Booking Issue">Booking Issue</option>
+        <option value="Payment Query">Payment Query</option>
+        <option value="Technical Support">Technical Support</option>
+        <option value="General Inquiry">General Inquiry</option>
+      </select>
+    </div>
+
+    <!-- Message -->
+    <div>
+      <label for="contactMessage" class="text-sm font-medium">
+        Message <span class="text-red-500">*</span>
+      </label>
+      <textarea
+        id="contactMessage"
+        [(ngModel)]="message"
+        name="message"
+        autocomplete="off"
+        required
+        rows="4"
+        placeholder="Write your message here..."
+        class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-accent focus:outline-none"
+      ></textarea>
+    </div>
+
+    <!-- Submit -->
+    <button
+      type="submit"
+      [disabled]="contactForm.invalid"
+      class="w-full bg-accent text-white py-3
+             rounded-md text-sm font-medium
+             hover:opacity-90
+             disabled:opacity-50
+             transition"
+    >
+      Send Message
+    </button>
+
+  </form>
+</div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="bg-primary text-white animate-fade">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold">
+      Need a Car Right Now?
+    </h2>
+
+    <p class="mt-4 opacity-80 max-w-2xl mx-auto">
+      Browse our available cars and book your ride in minutes.
+    </p>
+
+    <div class="mt-6">
+      <a
+        [routerLink]="ctaButtonLink"
+        class="bg-accent text-white px-8 py-3
+               rounded-md text-sm font-medium btn-animate"
+      >
+        {{ ctaButtonText }}
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,191 @@
+<nav class="w-full bg-white border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Brand -->
+      <a routerLink="/" class="flex items-center">
+        <img src="/logo.png" alt="Car2Go Logo" class="h-10 w-auto" />
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-primary">
+        <a
+          routerLink="/"
+          routerLinkActive="active-nav"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="hover:text-accent"
+        >
+          Home
+        </a>
+
+        <a
+          *ngIf="auth.isLoggedIn()"
+          routerLink="/cars"
+          routerLinkActive="active-nav"
+          class="hover:text-accent"
+        >
+          Cars
+        </a>
+
+        <a
+          *ngIf="auth.isLoggedIn()"
+          routerLink="/my-bookings"
+          routerLinkActive="active-nav"
+          class="hover:text-accent"
+        >
+          History
+        </a>
+
+        <a routerLink="/about"
+           class="hover:text-accent"
+           routerLinkActive="active-nav"
+        >
+          About Us
+        </a>
+
+        <a routerLink="/contact" 
+           class="hover:text-accent"
+           routerLinkActive="active-nav">
+          Contact
+        </a>
+
+        <a
+          *ngIf="auth.getRole() === 'Admin'"
+          routerLink="/admin"
+          class="hover:text-accent"
+        >
+          Admin
+        </a>
+      </div>
+
+      <!-- Desktop Actions -->
+      <div class="hidden md:flex items-center gap-4 text-sm">
+        <ng-container *ngIf="!auth.isLoggedIn()">
+          <a routerLink="/login" class="hover:text-accent">Login</a>
+
+          <a
+            routerLink="/register"
+            class="bg-accent text-white px-4 py-2 rounded-md hover:opacity-90"
+          >
+            Sign Up
+          </a>
+        </ng-container>
+
+        <div *ngIf="auth.isLoggedIn()" class="relative profile-container">
+          <div
+            (click)="toggleProfileMenu()"
+            class="w-9 h-9 bg-accent text-white flex items-center justify-center rounded-full cursor-pointer"
+          >
+            {{ getUserInitial() }}
+          </div>
+
+          <div
+            *ngIf="profileMenuOpen"
+            class="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg z-50 pointer-events-auto"
+          >
+            <div class="px-4 py-3 border-b text-sm font-medium text-gray-700">
+              {{ auth.getUser()?.name }}
+            </div>
+
+            <button
+              (click)="confirmLogout()"
+              class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Toggle -->
+      <button class="md:hidden text-2xl text-primary" (click)="toggleMenu()">
+        &#9776;
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="mobileMenuOpen" class="md:hidden bg-white border-t">
+    <div class="px-4 py-4 flex flex-col gap-4 text-sm text-primary">
+      <a routerLink="/" (click)="closeMobile()">Home</a>
+
+      <a *ngIf="auth.isLoggedIn()" routerLink="/cars" (click)="closeMobile()">
+        Cars
+      </a>
+
+      <a
+        *ngIf="auth.isLoggedIn()"
+        routerLink="/my-bookings"
+        (click)="closeMobile()"
+      >
+        History
+      </a>
+
+      <a routerLink="/about" (click)="closeMobile()">About</a>
+      <a routerLink="/contact" (click)="closeMobile()">Contact</a>
+
+      <a
+        *ngIf="auth.getRole() === 'Admin'"
+        routerLink="/admin"
+        (click)="closeMobile()"
+      >
+        Admin
+      </a>
+
+      <hr />
+
+      <ng-container *ngIf="!auth.isLoggedIn()">
+        <a routerLink="/login">Login</a>
+        <a
+          routerLink="/register"
+          class="bg-accent text-white text-center py-2 rounded-md"
+        >
+          Sign Up
+        </a>
+      </ng-container>
+
+      <ng-container *ngIf="auth.isLoggedIn()">
+        <div class="font-medium">
+          {{ auth.getUser()?.name }}
+        </div>
+
+        <button
+          (click)="confirmLogout()"
+          class="bg-gray-800 text-white py-2 rounded-md"
+        >
+          Logout
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div
+    *ngIf="showLogoutModal"
+    class="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 px-4"
+  >
+    <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
+      <h3 class="text-lg font-semibold text-primary">
+        Confirm Logout
+      </h3>
+      <p class="mt-2 text-sm text-muted">
+        Are you sure you want to logout from your account?
+      </p>
+
+      <div class="mt-5 flex justify-end gap-3">
+        <button
+          type="button"
+          (click)="cancelLogout()"
+          class="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          (click)="proceedLogout()"
+          class="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

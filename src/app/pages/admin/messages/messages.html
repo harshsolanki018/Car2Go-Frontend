@@ -1,0 +1,60 @@
+<h2 class="text-2xl font-semibold mb-8">
+  User Support Messages
+</h2>
+
+<div *ngIf="messages.length === 0" class="text-gray-500">
+  No messages received yet.
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+  <div
+    *ngFor="let msg of messages"
+    class="bg-white rounded-xl shadow-sm p-6 border"
+  >
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-start mb-4">
+
+      <div>
+        <p class="text-xs text-gray-400">
+          Ticket ID: {{ msg.ticketId }}
+        </p>
+
+        <h3 class="font-semibold text-primary">
+          {{ msg.subject }}
+        </h3>
+        <p class="text-xs text-gray-400 mt-1">
+          Date: {{ msg.createdAt | date:'medium' }}
+        </p> 
+
+        <p class="text-sm text-gray-600 mt-1">
+         Name: {{ msg.name }} <br> 
+         Email: {{ msg.email }} <br> 
+         Phone: {{ msg.phone }}
+        </p>
+       
+      </div>
+
+    </div>
+
+    <!-- MESSAGE BODY -->
+            <div class="bg-gray-50  rounded-md text-sm text-gray-700 mb-4">
+             <p class="font-semibold">Message:</p>  {{ msg.message }}
+          </div>
+
+    <!-- ACTIONS -->
+    <div class="flex gap-3">
+
+      <button
+        (click)="deleteMessage(msg.ticketId)"
+        class="px-3 py-1 text-xs bg-red-600 text-white rounded"
+      >
+        Delete Message
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

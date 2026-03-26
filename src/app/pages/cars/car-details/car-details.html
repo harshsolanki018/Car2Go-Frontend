@@ -1,0 +1,99 @@
+<!-- PAGE HEADER -->
+<section class="bg-background border-b animate-fade-up" *ngIf="car">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <a routerLink="/cars" class="text-accent text-sm">
+      &larr; Back to Cars
+    </a>
+
+    <h1 class="mt-3 text-2xl sm:text-3xl font-bold text-primary">
+      {{ car.name }}
+    </h1>
+
+    <p class="mt-1 text-muted text-sm">
+      {{ car.fuelType }} | {{ car.transmission }} | {{ car.seats }} Seats | {{ car.location }}
+    </p>
+  </div>
+</section>
+
+<!-- DETAILS -->
+<section class="bg-background animate-fade-up" *ngIf="car">
+  <div
+    class="max-w-7xl mx-auto
+           px-4 sm:px-6
+           py-14
+           grid grid-cols-1 lg:grid-cols-2 gap-12"
+  >
+    <!-- IMAGE -->
+    <div>
+      <img
+        [src]="car.image | secureUrl"
+        class="w-full h-[320px] sm:h-[420px] object-cover rounded-xl"
+        alt="{{ car.name }}"
+      />
+    </div>
+
+    <!-- INFO -->
+    <div>
+      <div class="bg-white border rounded-xl p-6 space-y-4">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-semibold text-primary">
+            Rental Price
+          </h2>
+          <span class="text-xl font-bold text-primary">
+            Rs. {{ car.pricePerDay }} / day
+          </span>
+        </div>
+
+        <hr />
+
+        <!-- Specs -->
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span class="text-muted">Fuel</span>
+            <p class="font-medium">{{ car.fuelType }}</p>
+          </div>
+
+          <div>
+            <span class="text-muted">Transmission</span>
+            <p class="font-medium">{{ car.transmission }}</p>
+          </div>
+
+          <div>
+            <span class="text-muted">Seats</span>
+            <p class="font-medium">{{ car.seats }}</p>
+          </div>
+
+          <div>
+            <span class="text-muted">Location</span>
+            <p class="font-medium">{{ car.location }}</p>
+          </div>
+        </div>
+
+        <hr />
+
+        <!-- Description -->
+        <div>
+          <h3 class="font-medium text-primary mb-2">
+            Description
+          </h3>
+          <p class="text-sm text-muted leading-relaxed">
+            {{ car.description }}
+          </p>
+        </div>
+
+        <!-- CTA -->
+        <button
+          [routerLink]="['/booking', car.id]"
+          class="px-4 py-2 rounded-md text-sm font-medium bg-accent text-white hover:opacity-90"
+        >
+          Book Now
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FALLBACK -->
+<div *ngIf="!car" class="text-center py-20 text-muted animate-fade">
+  Car not found.
+</div>

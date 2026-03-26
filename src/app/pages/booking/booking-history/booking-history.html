@@ -1,0 +1,190 @@
+<section class="min-h-screen bg-background">
+  <div class="max-w-6xl mx-auto px-4 py-10">
+    <!-- HEADER -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-primary">
+        My Rental History
+      </h1>
+      <p class="mt-2 text-muted text-sm">
+        Manage your bookings and track rental status.
+      </p>
+    </div>
+
+    <!-- EMPTY -->
+    <div
+      *ngIf="bookings.length === 0"
+      class="bg-white border rounded-xl p-8 text-center text-muted"
+    >
+      No bookings found.
+    </div>
+
+    <!-- BOOKINGS -->
+    <div class="space-y-6">
+      <div
+        *ngFor="let booking of bookings"
+        class="bg-white border rounded-xl p-6 shadow-sm hover:shadow-md transition"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
+          <!-- IMAGE -->
+          <div>
+            <img
+              [src]="(booking.image | secureUrl) || 'https://via.placeholder.com/300x200'"
+              class="w-full h-full object-cover rounded-lg"
+              alt="Car"
+            />
+          </div>
+
+          <!-- DETAILS -->
+          <div class="lg:col-span-2">
+            <h3 class="text-lg font-semibold text-primary">
+              {{ booking.carName }}
+            </h3>
+
+            <div class="mt-3 text-sm text-muted space-y-1">
+              <p class="text-xs text-gray-500 mt-1">
+                Booking ID:
+                <span class="font-mono font-medium">
+                  {{ booking.bookingId }}
+                </span>
+              </p>
+
+              <p>
+                Rental Period:
+                <span class="font-medium text-primary">
+                  {{ booking.pickupDate }} To {{ booking.returnDate }}
+                </span>
+              </p>
+
+              <p>
+                Duration:
+                <span class="font-medium text-primary">
+                  {{ booking.totalDays }} days
+                </span>
+              </p>
+
+              <p class="font-semibold text-primary mt-2">
+                Total Amount: Rs. {{ booking.totalAmount || booking.totalPrice }}
+              </p>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="flex flex-col items-end gap-4">
+            <!-- STATUS -->
+            <span
+              class="text-xs px-4 py-2 rounded-full font-medium"
+              [ngClass]="{
+                'bg-indigo-100 text-indigo-700': booking.status === 'Confirmed',
+                'bg-orange-100 text-orange-700': booking.status === 'Pickup Due',
+                'bg-green-100 text-green-700': booking.status === 'Active',
+                'bg-amber-100 text-amber-700': booking.status === 'Awaiting Return',
+                'bg-slate-100 text-slate-700': booking.status === 'Completed'
+              }"
+            >
+              {{ booking.status }}
+            </span>
+
+            <button
+              (click)="downloadInvoice(booking)"
+              class="px-3 py-1 text-xs bg-slate-900 text-white rounded hover:bg-slate-800"
+            >
+              Download Invoice
+            </button>
+
+            <!-- RATING SECTION -->
+            <div class="flex flex-col items-end gap-2 text-right">
+              <button
+                *ngIf="booking.status === 'Completed' && !booking.rating"
+                (click)="openRatingModal(booking)"
+                class="px-3 py-1 text-xs bg-orange-500 text-white rounded hover:bg-orange-600"
+              >
+                Rate Booking
+              </button>
+
+              <div *ngIf="booking.status === 'Completed' && booking.rating">
+                <span class="text-orange-500 font-medium">
+                  &#9733; {{ booking.rating }} / 5
+                </span>
+                <p *ngIf="booking.review" class="text-xs text-gray-500 mt-1">
+                  "{{ booking.review }}"
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div
+  *ngIf="ratingModalOpen"
+  class="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 px-4"
+  (click)="closeRatingModal()"
+>
+  <div
+    class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-primary">Rate Your Experience</h3>
+      <button
+        type="button"
+        class="text-sm text-muted hover:text-primary"
+        (click)="closeRatingModal()"
+      >
+        Close
+      </button>
+    </div>
+
+    <p class="mt-2 text-sm text-muted">
+      Share your experience for {{ ratingBooking?.carName }}.
+    </p>
+
+    <div class="mt-4 flex items-center gap-2">
+      <button
+        *ngFor="let star of [1,2,3,4,5]"
+        type="button"
+        (click)="setRating(star)"
+        class="text-2xl transition"
+        [ngClass]="{
+          'text-yellow-400': ratingValue >= star,
+          'text-gray-300': ratingValue < star
+        }"
+      >
+        &#9733;
+      </button>
+    </div>
+
+    <label for="bookingReview" class="sr-only">Review</label>
+    <textarea
+      id="bookingReview"
+      rows="3"
+      maxlength="100"
+      [(ngModel)]="ratingReview"
+      class="mt-4 w-full border rounded-md px-3 py-2 text-sm"
+      placeholder="Write a short review (max 100 characters)"
+    ></textarea>
+    <div class="mt-1 text-xs text-muted text-right">
+      {{ ratingReview.length }} / {{ ratingMaxLength }}
+    </div>
+
+    <div class="mt-5 flex justify-end gap-3">
+      <button
+        type="button"
+        (click)="closeRatingModal()"
+        class="px-4 py-2 border rounded-md text-sm"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        (click)="submitRating()"
+        [disabled]="ratingSubmitting"
+        class="px-4 py-2 bg-yellow-500 text-white rounded-md text-sm hover:bg-yellow-600 disabled:opacity-60"
+      >
+        {{ ratingSubmitting ? 'Submitting...' : 'Submit Rating' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,134 @@
+<h2 class="text-2xl font-semibold mb-2">Owner Performance Summary</h2>
+<p class="text-sm text-gray-600 mb-6">
+  Earnings shown are <strong>payable to owners</strong> after deductions:
+  <span class="font-medium">Platform Fee (15%)</span> +
+  <span class="font-medium">GST on Platform Fee (18%)</span>.
+  <span class="block mt-1 text-xs text-gray-500">
+    Owner Earnings = Total Amount - Platform Fee - GST
+  </span>
+</p>
+
+<div class="bg-white p-6 rounded-xl shadow-sm mb-6 flex flex-col lg:flex-row gap-4 justify-between">
+  <label for="adminOwnerPerformanceSearch" class="sr-only">Search owners</label>
+  <div class="relative w-full lg:w-80">
+    <fa-icon
+      [icon]="faMagnifyingGlass"
+      class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"
+    ></fa-icon>
+    <input
+      id="adminOwnerPerformanceSearch"
+      type="text"
+      [(ngModel)]="searchText"
+      autocomplete="off"
+      placeholder="Search by owner id, name, or email..."
+      class="border rounded-md pl-9 pr-4 py-2 text-sm w-full"
+    />
+  </div>
+  <div class="flex justify-end">
+    <select
+      class="border rounded-md px-4 py-2 text-sm w-full sm:w-56"
+      [(ngModel)]="selectedMonth"
+      (change)="setMonth(selectedMonth)"
+    >
+      <option *ngFor="let option of monthOptions" [value]="option.key">
+        {{ option.label }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 text-left">
+      <tr>
+        <th class="px-4 py-3 text-left w-[32%]">Owner Details</th>
+        <th class="px-4 py-3 text-center w-[14%]">Completed Bookings</th>
+        <th class="px-4 py-3 text-center w-[14%]">Revenue</th>
+        <th class="px-4 py-3 text-center w-[14%]">Unpaid Earnings</th>
+        <th class="px-4 py-3 text-center w-[14%]">Last Payout</th>
+        <th class="px-4 py-3 text-center w-[12%]">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let owner of filteredOwners" class="border-b hover:bg-gray-50">
+        <td class="px-4 py-4">
+          <div class="font-semibold text-gray-900">{{ owner.name }}</div>
+          <div class="text-xs text-gray-600">ID: {{ owner.id }}</div>
+          <div class="text-xs text-gray-500">{{ owner.email }}</div>
+        </td>
+
+        <td class="px-4 py-3 text-center">
+          {{ getOwnerStats(owner.id).completedBookings }}
+        </td>
+
+        <td class="px-4 py-3 text-center font-semibold">
+          Rs. {{ getOwnerStats(owner.id).totalRevenue | number:'1.0-0' }}
+        </td>
+
+        <td class="px-4 py-3 text-center">
+          Rs. {{ getOwnerStats(owner.id).unpaidEarnings | number:'1.0-0' }}
+        </td>
+
+        <td class="px-4 py-3 text-center">
+          <div>{{ getOwnerStats(owner.id).lastPayoutDate }}</div>
+          <div class="text-xs text-gray-500">
+            Rs. {{ getOwnerStats(owner.id).lastPaidAmount | number:'1.0-0' }}
+          </div>
+        </td>
+
+        <td class="px-4 py-3 text-center">
+          <button
+            type="button"
+            (click)="openPayModal(owner)"
+            [disabled]="getOwnerStats(owner.id).unpaidEarnings <= 0 || isPaying(owner.id)"
+            class="px-3 py-1.5 rounded-md text-xs font-semibold"
+            [class.bg-green-600]="getOwnerStats(owner.id).unpaidEarnings > 0"
+            [class.text-white]="getOwnerStats(owner.id).unpaidEarnings > 0"
+            [class.opacity-60]="getOwnerStats(owner.id).unpaidEarnings <= 0 || isPaying(owner.id)"
+            [class.bg-gray-200]="getOwnerStats(owner.id).unpaidEarnings <= 0"
+            [class.text-gray-600]="getOwnerStats(owner.id).unpaidEarnings <= 0"
+          >
+            {{
+              getOwnerStats(owner.id).unpaidEarnings > 0
+                ? (isPaying(owner.id) ? 'Paying...' : 'Pay Now')
+                : 'Paid'
+            }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div
+  *ngIf="showPayConfirm"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+>
+  <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
+    <h3 class="text-lg font-semibold text-gray-900">Confirm Payout</h3>
+    <p class="mt-2 text-sm text-gray-600">
+      Are you sure you want to pay
+      <span class="font-semibold text-gray-900">{{ pendingOwner?.name || 'this owner' }}</span>?
+    </p>
+    <p class="mt-2 text-xs text-gray-500">
+      This will mark all completed unpaid bookings as paid.
+    </p>
+    <div class="mt-6 flex justify-end gap-3">
+      <button
+        type="button"
+        (click)="closePayModal()"
+        class="rounded-md border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        (click)="confirmPayOwner()"
+        class="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700"
+      >
+        Pay
+      </button>
+    </div>
+  </div>
+</div>

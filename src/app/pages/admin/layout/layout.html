@@ -1,0 +1,179 @@
+<div class="min-h-screen flex bg-gray-100">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-gray-900 text-gray-200 flex flex-col">
+    <div class="px-6 py-4 text-xl font-bold border-b border-gray-800">
+      Car2Go <span class="text-sm text-gray-400">Admin</span>
+    </div>
+
+   <nav class="flex-1 px-4 py-6 space-y-4">
+     <a
+       routerLink="/admin/dashboard"
+       routerLinkActive="bg-gray-800 text-white"
+       class="block px-4 py-2 rounded transition hover:bg-gray-800"
+     >
+       Dashboard
+     </a>
+
+     <div class="pt-4 text-xs uppercase tracking-wider text-gray-400">
+       User
+     </div>
+  <a
+    routerLink="/admin/users"
+    routerLinkActive="bg-gray-800 text-white"
+    class="block px-4 py-2 rounded transition hover:bg-gray-800"
+  >
+    Users List
+  </a>
+  <a
+    routerLink="/admin/bookings"
+    routerLinkActive="bg-gray-800 text-white"
+    class="block px-4 py-2 rounded transition hover:bg-gray-800"
+  >
+    User Bookings
+  </a>
+  <a
+    routerLink="/admin/user-activity"
+    routerLinkActive="bg-gray-800 text-white"
+    class="block px-4 py-2 rounded transition hover:bg-gray-800"
+  >
+    User Activity & Ratings
+  </a>
+     <a
+       routerLink="/admin/messages"
+       routerLinkActive="bg-gray-800 text-white"
+       class="block px-4 py-2 rounded transition hover:bg-gray-800"
+     >
+       Support Messages
+     </a>
+
+     <div class="pt-4 text-xs uppercase tracking-wider text-gray-400">
+       Owner
+     </div>
+     <a
+       routerLink="/admin/owners"
+       routerLinkActive="bg-gray-800 text-white"
+       class="block px-4 py-2 rounded transition hover:bg-gray-800"
+     >
+       Owners List
+     </a>
+     <a
+       routerLink="/admin/owner-performance"
+       routerLinkActive="bg-gray-800 text-white"
+       class="block px-4 py-2 rounded transition hover:bg-gray-800"
+     >
+       Owner Performance
+     </a>
+      <a
+        routerLink="/admin/owner-car-requests"
+        routerLinkActive="bg-gray-800 text-white"
+        class="block px-4 py-2 rounded transition hover:bg-gray-800"
+      >
+        Owner Car Requests
+      </a>
+      <a
+        routerLink="/admin/owner-messages"
+        routerLinkActive="bg-gray-800 text-white"
+        class="block px-4 py-2 rounded transition hover:bg-gray-800"
+      >
+        Owner Support Messages
+      </a>
+
+     <div class="pt-4 text-xs uppercase tracking-wider text-gray-400">
+       Cars
+     </div>
+     <a
+       routerLink="/admin/cars"
+       routerLinkActive="bg-gray-800 text-white"
+       class="block px-4 py-2 rounded transition hover:bg-gray-800"
+     >
+       All Cars
+     </a>
+     <div class="pt-4 text-xs uppercase tracking-wider text-gray-400">
+       Platform / System
+     </div>
+     <a
+       routerLink="/admin/home-cars"
+       routerLinkActive="bg-gray-800 text-white"
+       class="block px-4 py-2 rounded transition hover:bg-gray-800"
+     >
+       Home Page Featured Cars
+     </a>
+     <a
+       routerLink="/admin/stats"
+       routerLinkActive="bg-gray-800 text-white"
+       class="block px-4 py-2 rounded transition hover:bg-gray-800"
+     >
+       Global Stats
+     </a>
+   </nav>
+
+    <!-- LOGOUT -->
+<div class="mt-auto px-4 pb-6">
+  <button
+    (click)="logout()"
+    class="w-full flex items-center justify-center gap-2
+           px-4 py-2
+           text-sm font-medium
+           text-red-600
+           border border-red-200
+           rounded-md
+           hover:bg-red-50"
+  >
+    Logout
+  </button>
+</div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <div class="flex-1 flex flex-col">
+
+    <!-- TOPBAR -->
+    <header class="bg-white border-b px-6 py-4 flex justify-between items-center">
+      <h1 class="font-semibold text-lg">Admin Panel</h1>
+      <div class="flex items-center gap-3">
+        <span class="text-sm text-gray-600">Admin</span>
+        <fa-icon [icon]="faUserTie" class="text-gray-600 text-xl"></fa-icon>
+      </div>
+    </header>
+
+    <!-- ADMIN CONTENT -->
+    <main class="flex-1 p-6">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+  <div
+    *ngIf="showLogoutModal"
+    class="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 px-4"
+  >
+    <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
+      <h3 class="text-lg font-semibold text-primary">
+        Confirm Logout
+      </h3>
+      <p class="mt-2 text-sm text-gray-600">
+        Are you sure you want to logout from admin panel?
+      </p>
+
+      <div class="mt-5 flex justify-end gap-3">
+        <button
+          type="button"
+          (click)="cancelLogout()"
+          class="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          (click)="proceedLogout()"
+          class="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

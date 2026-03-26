@@ -1,0 +1,16 @@
+.owner-active-nav {
+  color: #2563eb;
+  font-weight: 600;
+  position: relative;
+}
+
+.owner-active-nav::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background-color: #2563eb;
+  border-radius: 2px;
+}

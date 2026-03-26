@@ -1,0 +1,165 @@
+<!-- HERO -->
+<section class="bg-background">
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 py-14
+           text-center animate-fade-up"
+  >
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary">
+      About <span class="text-accent">Car2Go</span>
+    </h1>
+
+    <p class="mt-4 text-muted text-base sm:text-lg max-w-3xl mx-auto">
+      Car2Go is a modern car rental platform designed to make renting vehicles
+      simple, affordable, and reliable for everyone.
+    </p>
+  </div>
+</section>
+
+<!-- OUR STORY -->
+<section class="bg-section">
+  <div
+    class="max-w-7xl mx-auto px-4 sm:px-6 py-14
+           grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
+  >
+    <!-- TEXT -->
+    <div class="animate-fade-up">
+      <h2 class="text-2xl sm:text-3xl font-bold text-primary">
+        Our Story
+      </h2>
+
+      <p class="mt-4 text-muted leading-relaxed">
+        Car2Go was created with a simple idea — renting a car should be easy,
+        transparent, and stress-free. We noticed that many rental platforms were
+        complicated and filled with hidden charges.
+      </p>
+
+      <p class="mt-3 text-muted leading-relaxed">
+        Our mission is to provide customers with a seamless rental experience,
+        offering well-maintained vehicles, clear pricing, and reliable support.
+      </p>
+    </div>
+
+    <!-- IMAGE -->
+    <div class="animate-fade-up">
+      <img
+        src="https://images.unsplash.com/photo-1493238792000-8113da705763"
+        alt="Car rental journey"
+        class="w-full h-[300px] object-cover rounded-2xl shadow-lg"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- MISSION & VISION -->
+<section class="bg-background">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <!-- MISSION -->
+      <div class="bg-white border rounded-xl p-6 hover-lift animate-fade-up">
+        <h3 class="text-xl font-semibold text-primary mb-2">
+          Our Mission
+        </h3>
+        <p class="text-muted leading-relaxed">
+          To simplify car rentals by offering affordable pricing, flexible
+          booking options, and a user-friendly digital experience.
+        </p>
+      </div>
+
+      <!-- VISION -->
+      <div class="bg-white border rounded-xl p-6 hover-lift animate-fade-up">
+        <h3 class="text-xl font-semibold text-primary mb-2">
+          Our Vision
+        </h3>
+        <p class="text-muted leading-relaxed">
+          To become one of the most trusted and customer-centric car rental
+          platforms, connecting people with reliable mobility solutions.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="bg-section">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+
+    <div class="text-center mb-12 animate-fade-up">
+      <h2 class="text-2xl sm:text-3xl font-bold text-primary">
+        Why Choose Car2Go?
+      </h2>
+      <p class="mt-3 text-muted max-w-2xl mx-auto">
+        We focus on what truly matters to our customers.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <div class="bg-white border rounded-xl p-6 text-center hover-lift animate-fade-up">
+        <fa-icon [icon]="faCar" class="w-8 h-8 text-accent mx-auto" style="color: #111827;"></fa-icon>
+        <h4 class="font-semibold text-primary mt-3">
+          Quality Vehicles
+        </h4>
+        <p class="text-sm text-muted mt-2">
+          Clean, safe, and regularly serviced cars.
+        </p>
+      </div>
+
+      <div class="bg-white border rounded-xl p-6 text-center hover-lift animate-fade-up">
+        <fa-icon [icon]="faSackDollar" class="w-8 h-8 text-accent mx-auto" style="color: #111827;"></fa-icon>
+        <h4 class="font-semibold text-primary mt-3">
+          Transparent Pricing
+        </h4>
+        <p class="text-sm text-muted mt-2">
+          No hidden fees or surprise charges.
+        </p>
+      </div>
+
+      <div class="bg-white border rounded-xl p-6 text-center hover-lift animate-fade-up">
+        <fa-icon [icon]="faStopwatch" class="w-8 h-8 text-accent mx-auto" style="color: #111827;"></fa-icon>
+        <h4 class="font-semibold text-primary mt-3">
+          Flexible Rentals
+        </h4>
+        <p class="text-sm text-muted mt-2">
+          Rent by day or hour, your choice.
+        </p>
+      </div>
+
+      <div class="bg-white border rounded-xl p-6 text-center hover-lift animate-fade-up">
+        <fa-icon [icon]="faPhone" class="w-8 h-8 text-accent mx-auto" style="color: #111827;"></fa-icon>
+        <h4 class="font-semibold text-primary mt-3">
+          24/7 Support
+        </h4>
+        <p class="text-sm text-muted mt-2">
+          Assistance whenever you need it.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="bg-primary text-white animate-fade">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold">
+      Ready to Ride with Car2Go?
+    </h2>
+
+    <p class="mt-4 opacity-80 max-w-2xl mx-auto">
+      Explore our cars and experience a smarter way to rent.
+    </p>
+
+    <div class="mt-6">
+      <button
+        [routerLink]="ctaButtonLink"
+        class="bg-accent text-white px-8 py-3 rounded-md
+               text-sm font-medium btn-animate"
+      >
+        {{ ctaButtonText }}
+      </button>
+    </div>
+  </div>
+</section>

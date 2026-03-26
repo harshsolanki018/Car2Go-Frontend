@@ -1,0 +1,10 @@
+<app-owner-navbar *ngIf="!isAdminRoute && isOwnerLayout"></app-owner-navbar>
+<app-navbar *ngIf="!isAdminRoute && !isOwnerLayout"></app-navbar>
+<app-flash-message></app-flash-message>
+
+<main class="min-h-screen bg-background">
+  <router-outlet></router-outlet>
+</main>
+
+<app-owner-footer *ngIf="!isAdminRoute && isOwnerLayout"></app-owner-footer>
+<app-footer *ngIf="!isAdminRoute && !isOwnerLayout"></app-footer>

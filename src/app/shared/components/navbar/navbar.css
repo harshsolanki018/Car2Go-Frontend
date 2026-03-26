@@ -1,0 +1,27 @@
+  /* Desktop active underline */
+  .active-nav {
+    color: #f97316; /* Tailwind orange-500 / accent */
+    font-weight: 600;
+    position: relative;
+  }
+  .active-nav::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    background-color: #f97316;
+    border-radius: 2px;
+  }
+
+  /* Mobile active indicator */
+  .active-nav-mobile {
+    color: #f97316;
+    font-weight: 600;
+  }
+.logo-img {
+  max-height: 72px;
+  width: auto;
+  object-fit: contain;
+}

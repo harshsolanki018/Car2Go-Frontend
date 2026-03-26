@@ -1,0 +1,469 @@
+<nav class="w-full bg-owner-background border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <a routerLink="/owner" class="flex items-center gap-2">
+        <img src="/logo-blue2.png" alt="Car2Go Logo" class="h-10 w-auto" />
+        
+      </a>
+
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-owner-primary">
+        <a
+          routerLink="/owner"
+          routerLinkActive="owner-active-nav"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="hover:text-owner-accent"
+        >
+          Home
+        </a>
+
+        
+        <a
+          *ngIf="isOwnerLoggedIn()"
+          routerLink="/owner/owner-cars"
+          routerLinkActive="owner-active-nav"
+          class="hover:text-owner-accent"
+        >
+          My Cars
+        </a>
+        <a
+          *ngIf="isOwnerLoggedIn()"
+          routerLink="/owner/my-bookings"
+          routerLinkActive="owner-active-nav"
+          class="hover:text-owner-accent"
+        >
+          My Bookings
+        </a>
+        <a
+          *ngIf="isOwnerLoggedIn()"
+          routerLink="/owner/dashboard"
+          routerLinkActive="owner-active-nav"
+          class="hover:text-owner-accent"
+        >
+          Dashboard
+        </a>
+        
+        <a
+          routerLink="/owner/about"
+          routerLinkActive="owner-active-nav"
+          class="hover:text-owner-accent"
+        >
+          About
+        </a>
+        
+        <a
+          routerLink="/owner/contact"
+          routerLinkActive="owner-active-nav"
+          class="hover:text-owner-accent"
+        >
+          Contact
+        </a>
+        <a
+          routerLink="/owner/estimate-profit"
+          routerLinkActive="owner-active-nav"
+          class="hover:text-owner-accent"
+        >
+          Estimate Profit
+        </a>
+      </div>
+
+      <div class="hidden md:flex items-center gap-4 text-sm">
+        <ng-container *ngIf="!isOwnerLoggedIn()">
+          <a routerLink="/owner-login" class="text-owner-primary hover:text-owner-accent">Login</a>
+          <a
+            routerLink="/owner-register"
+            class="bg-owner-accent text-white px-4 py-2 rounded-md hover:opacity-90"
+          >
+            Sign Up
+          </a>
+        </ng-container>
+
+        <div *ngIf="isOwnerLoggedIn()" class="relative owner-profile-container">
+          <div
+            (click)="openProfileModal()"
+            class="w-9 h-9 bg-owner-accent text-white flex items-center justify-center rounded-full cursor-pointer"
+          >
+            {{ getUserInitial() }}
+          </div>
+        </div>
+      </div>
+
+      <button class="md:hidden text-2xl text-owner-primary" (click)="toggleMenu()">
+        &#9776;
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="mobileMenuOpen" class="md:hidden bg-white border-t">
+    <div class="px-4 py-4 flex flex-col gap-4 text-sm text-owner-primary">
+      <a routerLink="/owner" (click)="closeMobile()">Home</a>
+      <a *ngIf="isOwnerLoggedIn()" routerLink="/owner/dashboard" (click)="closeMobile()">
+        Dashboard
+      </a>
+      <a routerLink="/owner/estimate-profit" (click)="closeMobile()">Estimate Profit</a>
+      <a *ngIf="isOwnerLoggedIn()" routerLink="/owner/owner-cars" (click)="closeMobile()">My Cars</a>
+      <a *ngIf="isOwnerLoggedIn()" routerLink="/owner/my-bookings" (click)="closeMobile()">My Bookings</a>
+      <a routerLink="/owner/about" (click)="closeMobile()">About</a>
+      <a routerLink="/owner/contact" (click)="closeMobile()">Contact</a>
+
+      <hr />
+
+      <ng-container *ngIf="!isOwnerLoggedIn()">
+        <a routerLink="/owner-login" (click)="closeMobile()">Partner Login</a>
+        <a
+          routerLink="/owner-register"
+          (click)="closeMobile()"
+          class="bg-owner-accent text-white text-center py-2 rounded-md"
+        >
+          Partner Sign Up
+        </a>
+      </ng-container>
+
+      <ng-container *ngIf="isOwnerLoggedIn()">
+        <div class="font-medium">{{ auth.getUser()?.name }}</div>
+        <button
+          (click)="openProfileModal(); closeMobile()"
+          class="bg-owner-accent text-white py-2 rounded-md"
+        >
+          Profile
+        </button>
+        <button
+          (click)="confirmLogout()"
+          class="bg-owner-primary text-white py-2 rounded-md"
+        >
+          Logout
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div
+    *ngIf="showLogoutModal"
+    class="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 px-4"
+  >
+    <div class="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
+      <h3 class="text-lg font-semibold text-owner-primary">Confirm Logout</h3>
+      <p class="mt-2 text-sm text-owner-muted">
+        Are you sure you want to logout from partner account?
+      </p>
+
+      <div class="mt-5 flex justify-end gap-3">
+        <button
+          type="button"
+          (click)="cancelLogout()"
+          class="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          (click)="proceedLogout()"
+          class="rounded-md bg-owner-accent px-4 py-2 text-sm text-white hover:opacity-90"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="profileModalOpen"
+    class="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 px-4"
+    (click)="closeProfileModal()"
+  >
+    <div
+      class="w-full max-w-2xl rounded-xl bg-white shadow-xl max-h-[90vh] flex flex-col p-6"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs font-semibold tracking-wide uppercase text-owner-accent">
+            Car2Go Partners
+          </p>
+          <h3 class="text-lg sm:text-xl font-semibold text-owner-primary">
+            Partner Profile
+          </h3>
+        </div>
+        <button
+          type="button"
+          class="text-sm text-owner-muted hover:text-owner-primary"
+          (click)="closeProfileModal()"
+        >
+          Close
+        </button>
+      </div>
+
+      <div class="mt-6 flex-1 min-h-0 space-y-4 text-sm overflow-y-auto pr-2">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-gray-200 bg-owner-section p-4">
+          <div class="flex items-center gap-3">
+            <div class="h-12 w-12 rounded-full bg-owner-accent text-white flex items-center justify-center text-lg font-semibold">
+              {{ getUserInitial() }}
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-owner-primary">
+                {{ displayValue(profileForm.name) }}
+              </p>
+              <p class="text-xs text-owner-muted">
+                {{ displayValue(profileForm.email) }}
+              </p>
+            </div>
+          </div>
+          <div class="text-xs text-owner-muted">
+            Status: <span class="text-green-600 font-semibold">Active</span>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">Name</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              {{ displayValue(profileForm.name) }}
+            </div>
+            <input
+              *ngIf="profileEditMode"
+              type="text"
+              name="profileName"
+              [(ngModel)]="profileForm.name"
+              autocomplete="name"
+              readonly
+              class="w-full sm:w-2/3 border rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">Phone Number</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              {{ displayValue(profileForm.phone) }}
+            </div>
+            <div *ngIf="profileEditMode" class="sm:w-2/3 w-full">
+              <input
+                type="tel"
+                name="profilePhone"
+                [(ngModel)]="profileForm.phone"
+                pattern="[0-9]{10}"
+                minlength="10"
+                maxlength="10"
+                inputmode="numeric"
+                autocomplete="tel"
+                readonly
+                class="w-full border rounded-md px-3 py-2 text-sm"
+              />
+              <p class="mt-1 text-xs text-owner-muted">10-digit Indian mobile number.</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">Email</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              {{ displayValue(profileForm.email) }}
+            </div>
+            <input
+              *ngIf="profileEditMode"
+              type="email"
+              name="profileEmail"
+              [(ngModel)]="profileForm.email"
+              autocomplete="email"
+              readonly
+              class="w-full sm:w-2/3 border rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">Gender</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              {{ displayValue(profileForm.gender) }}
+            </div>
+            <select
+              *ngIf="profileEditMode"
+              name="profileGender"
+              [(ngModel)]="profileForm.gender"
+              class="w-full sm:w-2/3 border rounded-md px-3 py-2 text-sm"
+            >
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">Age</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              {{ displayValue(profileForm.age) }}
+            </div>
+            <div *ngIf="profileEditMode" class="sm:w-2/3 w-full">
+              <input
+                type="number"
+                name="profileAge"
+                min="19"
+                max="84"
+                [(ngModel)]="profileForm.age"
+                class="w-full border rounded-md px-3 py-2 text-sm"
+              />
+              <p class="mt-1 text-xs text-owner-muted">Age must be between 19 and 84.</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">Current Address</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              {{ displayValue(profileForm.address) }}
+            </div>
+            <input
+              *ngIf="profileEditMode"
+              type="text"
+              name="profileAddress"
+              [(ngModel)]="profileForm.address"
+              autocomplete="street-address"
+              class="w-full sm:w-2/3 border rounded-md px-3 py-2 text-sm"
+            />
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">License Number</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              {{ displayValue(profileForm.licenseNumber) }}
+            </div>
+            <div *ngIf="profileEditMode" class="sm:w-2/3 w-full">
+              <input
+                type="text"
+                name="profileLicense"
+                [(ngModel)]="profileForm.licenseNumber"
+                pattern="[A-Z]{2}[ -]?[0-9]{2}[ -]?[0-9]{4}[ -]?[0-9]{7}"
+                autocomplete="off"
+                class="w-full border rounded-md px-3 py-2 text-sm uppercase"
+              />
+              <p class="mt-1 text-xs text-owner-muted">Format: e.g. MH12 20110012345</p>
+            </div>
+          </div>
+
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">License Front Image</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              <span *ngIf="profileForm.licenseFrontImage; else licenseFrontMissing" class="font-medium">
+                Uploaded
+              </span>
+              <ng-template #licenseFrontMissing>Not provided</ng-template>
+              <a
+                *ngIf="profileForm.licenseFrontImage"
+                [href]="getDownloadUrl(profileForm.licenseFrontImage, 'license-front')"
+                download="license-front"
+                class="ml-3 text-xs text-owner-accent hover:underline"
+              >
+                Download
+              </a>
+            </div>
+            <div *ngIf="profileEditMode" class="sm:w-2/3 w-full">
+              <input
+                type="file"
+                accept="image/*"
+                (change)="onLicenseImageSelect($event, 'front')"
+                class="w-full border rounded-md px-3 py-2 text-sm"
+              />
+              <p class="mt-1 text-xs text-owner-muted">JPG/PNG, max 2MB.</p>
+              <img
+                *ngIf="profileForm.licenseFrontImage"
+                [src]="profileForm.licenseFrontImage"
+                alt="License front preview"
+                class="mt-2 h-24 rounded-md object-cover"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">License Back Image</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              <span *ngIf="profileForm.licenseBackImage; else licenseBackMissing" class="font-medium">
+                Uploaded
+              </span>
+              <ng-template #licenseBackMissing>Not provided</ng-template>
+              <a
+                *ngIf="profileForm.licenseBackImage"
+                [href]="getDownloadUrl(profileForm.licenseBackImage, 'license-back')"
+                download="license-back"
+                class="ml-3 text-xs text-owner-accent hover:underline"
+              >
+                Download
+              </a>
+            </div>
+            <div *ngIf="profileEditMode" class="sm:w-2/3 w-full">
+              <input
+                type="file"
+                accept="image/*"
+                (change)="onLicenseImageSelect($event, 'back')"
+                class="w-full border rounded-md px-3 py-2 text-sm"
+              />
+              <p class="mt-1 text-xs text-owner-muted">JPG/PNG, max 2MB.</p>
+              <img
+                *ngIf="profileForm.licenseBackImage"
+                [src]="profileForm.licenseBackImage"
+                alt="License back preview"
+                class="mt-2 h-24 rounded-md object-cover"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <label class="text-xs font-semibold uppercase text-owner-muted sm:w-1/3">Aadhaar Number</label>
+            <div *ngIf="!profileEditMode" class="text-owner-primary sm:w-2/3">
+              {{ displayValue(profileForm.aadhaarNumber) }}
+            </div>
+            <div *ngIf="profileEditMode" class="sm:w-2/3 w-full">
+              <input
+                type="text"
+                name="profileAadhaar"
+                [(ngModel)]="profileForm.aadhaarNumber"
+                pattern="[2-9][0-9]{11}"
+                minlength="12"
+                maxlength="12"
+                inputmode="numeric"
+                autocomplete="off"
+                class="w-full border rounded-md px-3 py-2 text-sm"
+              />
+              <p class="mt-1 text-xs text-owner-muted">12 digits, starting 2-9.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mt-4 flex flex-wrap justify-end gap-3 border-t pt-4">
+        <button
+          *ngIf="!profileEditMode"
+          type="button"
+          (click)="startEditProfile()"
+          class="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+        >
+          Edit
+        </button>
+        <button
+          *ngIf="profileEditMode"
+          type="button"
+          (click)="cancelEditProfile()"
+          class="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+        <button
+          *ngIf="profileEditMode"
+          type="button"
+          (click)="saveProfile()"
+          [disabled]="profileSaving"
+          class="rounded-md bg-owner-accent px-4 py-2 text-sm text-white hover:opacity-90 disabled:opacity-60"
+        >
+          {{ profileSaving ? 'Saving...' : 'Save' }}
+        </button>
+        <button
+          *ngIf="!profileEditMode"
+          type="button"
+          (click)="confirmLogout()"
+          class="rounded-md bg-owner-primary px-4 py-2 text-sm text-white hover:opacity-90"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+

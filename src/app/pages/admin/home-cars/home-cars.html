@@ -1,0 +1,96 @@
+<h2 class="text-2xl font-semibold mb-6">
+  Home Page Cars
+</h2>
+
+<div class="bg-white rounded-xl p-6 shadow-sm mb-6">
+  <p class="text-sm text-gray-600">
+    Select up to <strong>3 non-maintenance cars</strong> to appear on the Home page.
+    If nothing is selected, Home will automatically show the first 3 non-maintenance cars.
+  </p>
+
+  <div class="mt-4 text-sm">
+    Selected: <strong>{{ featuredIds.length }} / 3</strong>
+  </div>
+
+  <div class="mt-5 flex gap-3">
+    <button
+      (click)="saveSelection()"
+      class="px-4 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700"
+    >
+      Save Selection
+    </button>
+
+    <button
+      (click)="useAutomaticSelection()"
+      class="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
+    >
+      Use Automatic Top 3
+    </button>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 text-left">
+      <tr>
+        <th class="px-4 py-3">Show on Home</th>
+        <th class="px-4 py-3">Car</th>
+        <th class="px-4 py-3">Car Number</th>
+        <th class="px-4 py-3">Specs</th>
+        <th class="px-4 py-3">Price/Day</th>
+        <th class="px-4 py-3">Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let car of availableCars" class="border-t hover:bg-gray-50">
+        <td class="px-4 py-3">
+          <label for="homeCarToggle-{{ car.id }}" class="sr-only">
+            Show {{ car.name }} on home page
+          </label>
+          <input
+            id="homeCarToggle-{{ car.id }}"
+            type="checkbox"
+            [checked]="isSelected(car.id)"
+            (change)="onSelectionChange(car.id, $event)"
+            autocomplete="off"
+            class="h-4 w-4 accent-blue-600"
+          />
+        </td>
+
+        <td class="px-4 py-3">
+          <div class="flex items-center gap-3">
+            <img
+              [src]="(car.image | secureUrl) || 'https://via.placeholder.com/80x50'"
+              alt="Car"
+              class="w-14 h-10 rounded object-cover"
+            />
+            <span class="font-medium">{{ car.name }}</span>
+          </div>
+        </td>
+
+        <td class="px-4 py-3 font-mono text-gray-600">
+          {{ car.carNumber }}
+        </td>
+
+        <td class="px-4 py-3 text-gray-600">
+          {{ car.fuelType }} | {{ car.transmission }} | {{ car.location }}
+        </td>
+
+        <td class="px-4 py-3 font-semibold">
+          Rs. {{ car.pricePerDay }}
+        </td>
+
+        <td class="px-4 py-3">
+          <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700">
+            {{ car.status }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="availableCars.length === 0" class="p-6 text-center text-gray-500">
+    No selectable cars found.
+  </div>
+</div>

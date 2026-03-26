@@ -1,0 +1,230 @@
+<!-- CONTENT -->
+<section class="bg-owner-background animate-fade-up">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-12">
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+      <div>
+        <p class="text-xs font-semibold tracking-wide uppercase text-owner-accent">
+          Platform Charges &amp; Fees
+        </p>
+        <h2 class="mt-2 text-3xl sm:text-4xl font-bold text-owner-primary">
+          Transparent Pricing <br>
+          No Hidden Charges
+        </h2>
+        <p class="mt-3 text-sm sm:text-base text-owner-muted max-w-xl">
+          A small percentage of each booking keeps the platform secure, reliable, and
+          supported. Below is a transparent breakdown of the fees and ongoing owner costs.
+        </p>
+        <div class="mt-6 space-y-4 text-sm sm:text-base text-owner-muted">
+          <div>
+            <p class="font-semibold text-owner-primary">Platform Charges - 15%</p>
+            <p>
+              Car2Go charges a 15% service fee from total rental revenue for using the
+              platform, managing bookings, and providing support services.
+            </p>
+          </div>
+          <div>
+            <p class="font-semibold text-owner-primary">GST on Platform Fee - 18%</p>
+            <p>
+              As per government regulations, 18% GST is applied to the platform service fee.
+            </p>
+          </div>
+          <div>
+            <p class="font-semibold text-owner-primary">Maintenance Cost</p>
+            <p>
+              Regular servicing, repairs, and cleaning keep the vehicle in top condition.
+            </p>
+          </div>
+          <div>
+            <p class="font-semibold text-owner-primary">Insurance Cost</p>
+            <p>
+              Owners are responsible for maintaining valid vehicle insurance as part of
+              operating costs.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border rounded-2xl p-6 shadow-sm">
+        <h3 class="text-base font-semibold text-owner-primary">Quick Fee Summary</h3>
+        <p class="mt-1 text-xs text-owner-muted">
+          At-a-glance view of key rates applied to revenue.
+        </p>
+        <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+          <div class="rounded-lg border bg-owner-section p-4">
+            <p class="text-xl font-semibold text-owner-primary">15%</p>
+            <p class="text-xs text-owner-muted mt-1">Platform Charges</p>
+          </div>
+          <div class="rounded-lg border bg-owner-section p-4">
+            <p class="text-xl font-semibold text-owner-primary">18%</p>
+            <p class="text-xs text-owner-muted mt-1">GST (Goods and Services Tax)</p>
+          </div>
+          <div class="rounded-lg border bg-owner-section p-4">
+            <p class="text-xl font-semibold text-owner-primary">Monthly</p>
+            <p class="text-xs text-owner-muted mt-1">Maintenance Costs</p>
+          </div>
+          <div class="rounded-lg border bg-owner-section p-4">
+            <p class="text-xl font-semibold text-owner-primary">Monthly</p>
+            <p class="text-xs text-owner-muted mt-1">Insurance Costs</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-6">
+      <div>
+        <p class="text-xs font-semibold tracking-wide uppercase text-owner-accent">
+          Profit Estimator
+        </p>
+        <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-owner-primary">
+          Estimate Your Monthly Earnings
+        </h3>
+        <p class="mt-3 text-sm sm:text-base text-owner-muted max-w-3xl">
+          Enter your expected rental activity and monthly costs. The calculator will show
+          projected revenue, platform fees, taxes, and net monthly profit.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-8">
+        <div class="bg-white border rounded-2xl p-6 shadow-sm">
+          <h4 class="text-lg font-semibold text-owner-primary">
+            Required Information
+          </h4>
+          <p class="text-sm text-owner-muted mt-1">
+            Enter your expected activity and monthly costs.
+          </p>
+
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="sm:col-span-2">
+              <label for="profitPricePerDay" class="text-sm font-medium text-owner-primary">
+                Rental Price per Day
+              </label>
+              <input
+                id="profitPricePerDay"
+                type="number"
+                min="1"
+                inputmode="numeric"
+                [(ngModel)]="pricePerDay"
+                placeholder="e.g., 1200"
+                class="mt-2 w-full border rounded-md px-3 py-2 text-sm"
+              />
+              <p class="mt-1 text-xs text-owner-muted">
+                Price set by the owner for renting the car.
+              </p>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="profitRentalDays" class="text-sm font-medium text-owner-primary">
+                Rental Days per Month
+              </label>
+              <input
+                id="profitRentalDays"
+                type="number"
+                min="1"
+                inputmode="numeric"
+                [(ngModel)]="rentalDaysPerMonth"
+                placeholder="e.g., 18"
+                class="mt-2 w-full border rounded-md px-3 py-2 text-sm"
+              />
+              <p class="mt-1 text-xs text-owner-muted">
+                Expected number of days rented in a month.
+              </p>
+            </div>
+
+            <div>
+              <label for="profitMaintenanceCost" class="text-sm font-medium text-owner-primary">
+                Maintenance Cost (Monthly)
+              </label>
+              <input
+                id="profitMaintenanceCost"
+                type="number"
+                min="0"
+                inputmode="numeric"
+                [(ngModel)]="maintenanceCost"
+                placeholder="e.g., 2500"
+                class="mt-2 w-full border rounded-md px-3 py-2 text-sm"
+              />
+            </div>
+
+            <div>
+              <label for="profitInsuranceCost" class="text-sm font-medium text-owner-primary">
+                Insurance Cost (Monthly)
+              </label>
+              <input
+                id="profitInsuranceCost"
+                type="number"
+                min="0"
+                inputmode="numeric"
+                [(ngModel)]="insuranceCost"
+                placeholder="e.g., 1200"
+                class="mt-2 w-full border rounded-md px-3 py-2 text-sm"
+              />
+            </div>
+          </div>
+
+          <label class="mt-4 flex items-center gap-2 text-sm text-owner-primary">
+            <input type="checkbox" [(ngModel)]="showAnnual" />
+            Show Annual Profit
+          </label>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-white border rounded-2xl p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="text-base font-semibold text-owner-primary">Monthly Results</h4>
+                <p class="text-xs text-owner-muted mt-1">
+                  Calculated automatically from the inputs.
+                </p>
+              </div>
+              <div class="text-right">
+                <p class="text-xs text-owner-muted">Net Monthly Profit</p>
+                <p class="text-2xl font-semibold text-owner-primary">
+                  Rs. {{ breakdown.netMonthlyProfit | number:'1.0-0' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-6 space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-owner-muted">Monthly Revenue</span>
+                <span class="font-medium text-owner-primary">
+                  Rs. {{ breakdown.monthlyRevenue | number:'1.0-0' }}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-owner-muted">Platform Charges (15%)</span>
+                <span class="font-medium text-owner-primary">
+                  Rs. {{ breakdown.platformCommission | number:'1.0-0' }}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-owner-muted">GST on Platform Fee (18%)</span>
+                <span class="font-medium text-owner-primary">
+                  Rs. {{ breakdown.gstOnCommission | number:'1.0-0' }}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-owner-muted">Total Expenses</span>
+                <span class="font-medium text-owner-primary">
+                  Rs. {{ breakdown.totalExpenses | number:'1.0-0' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="showAnnual" class="bg-owner-section border rounded-2xl p-6">
+            <h4 class="text-base font-semibold text-owner-primary">
+              Annual Profit (Optional)
+            </h4>
+            <div class="mt-3 text-sm flex justify-between">
+              <span class="text-owner-muted">Net Monthly Profit x 12</span>
+              <span class="font-medium text-owner-primary">
+                Rs. {{ breakdown.annualProfit | number:'1.0-0' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>

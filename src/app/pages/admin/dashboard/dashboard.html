@@ -1,0 +1,139 @@
+<h2 class="text-2xl font-semibold mb-6">
+  Admin Snapshot
+</h2>
+
+<!-- COMPANY EARNINGS -->
+<div class="bg-white rounded-xl shadow-sm p-6 mb-10">
+  <h3 class="font-semibold text-lg mb-2">
+    Company Earnings
+  </h3>
+  <p class="text-sm text-gray-500 mb-4">
+    Platform charges collected from users and owners.
+  </p>
+  <div class="text-3xl font-bold">
+    {{ companyEarningsDisplay }}
+  </div>
+</div>
+
+<!-- OVERVIEW CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+  <div
+    *ngFor="let stat of stats"
+    class="bg-white rounded-xl p-6 shadow-sm"
+  >
+    <p class="text-sm text-gray-500">
+      {{ stat.label }}
+    </p>
+    <h3 class="text-2xl font-bold mt-2">
+      {{ stat.value }}
+    </h3>
+  </div>
+</div>
+
+<!-- OVERALL RATING -->
+<div class="bg-white rounded-xl shadow-sm p-6 mb-10">
+  <h3 class="font-semibold text-lg mb-3">
+    Platform Rating
+  </h3>
+  <p class="text-sm text-gray-500 mb-4">
+    Based on completed bookings across the platform.
+  </p>
+
+  <div class="flex items-center gap-4">
+    <span class="text-3xl font-bold">
+      {{ overallRating }}
+    </span>
+
+    <div class="flex">
+      <span
+        *ngFor="let star of [1,2,3,4,5]"
+        class="text-xl"
+        [ngClass]="{
+          'text-yellow-400': overallRating >= star,
+          'text-gray-300': overallRating < star
+        }"
+      >
+        &#9733;
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ALL CARS TABLE -->
+<div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+  <div class="p-6 border-b">
+    <h3 class="font-semibold text-lg">
+      All Cars Performance
+    </h3>
+    <p class="text-sm text-gray-500 mt-1">
+      Booking volume, revenue, and ratings per vehicle.
+    </p>
+  </div>
+
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 text-left">
+      <tr>
+        <th class="p-4">Car ID</th>
+        <th class="p-4">Car Number</th>
+        <th class="p-4">Car Name</th>
+        <th class="p-4">Bookings</th>
+        <th class="p-4">Revenue</th>
+        <th class="p-4">Avg Rating</th>
+        <th class="p-4">Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let car of carStats"
+        class="border-t hover:bg-gray-50"
+      >
+        <td class="p-4">
+          <div class="flex items-center gap-3">
+            <img
+              [src]="(car.image | secureUrl) || 'https://via.placeholder.com/100x60'"
+              class="w-14 h-10 rounded object-cover"
+            />
+            <div class="font-mono text-sm text-gray-600">
+              {{ car.id }}
+            </div>
+          </div>
+        </td>
+
+        <td class="p-4 font-mono text-sm text-gray-600">
+          {{ car.carNumber }}
+        </td>
+
+        <td class="p-4">
+          {{ car.name }}
+        </td>
+
+        <td class="p-4">
+          {{ car.bookings }}
+        </td>
+
+        <td class="p-4 font-semibold">
+          {{ car.revenueDisplay || ('Rs. ' + (car.revenue || 0)) }}
+        </td>
+
+        <td class="p-4">
+          {{ car.avgRating }}
+        </td>
+
+        <td class="p-4">
+            <span
+              class="px-3 py-1 text-xs rounded-full"
+              [ngClass]="{
+                'bg-green-100 text-green-700': car.status === 'Approved',
+                'bg-yellow-100 text-yellow-700': car.status === 'Pending',
+                'bg-red-100 text-red-700': car.status === 'Rejected',
+                'bg-gray-200 text-gray-700': car.status === 'Blocked'
+              }"
+            >
+            {{ car.status }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

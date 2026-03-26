@@ -1,0 +1,184 @@
+<!-- HERO -->
+<section class="bg-owner-background">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14 text-center animate-fade-up">
+    <h1 class="text-3xl sm:text-4xl font-bold text-owner-primary">
+      Contact <span class="text-owner-accent">Car2Go Partners</span>
+    </h1>
+    <p class="mt-4 text-owner-muted max-w-2xl mx-auto">
+      Need help with partner listings, booking approvals, or payouts? Our partner support team is ready to assist.
+    </p>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section class="bg-owner-section">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid grid-cols-1 lg:grid-cols-2 gap-10">
+    <!-- CONTACT INFO -->
+    <div class="animate-fade-up">
+      <h2 class="text-2xl font-bold text-owner-primary">
+        Partner Support
+      </h2>
+
+      <p class="mt-3 text-owner-muted">
+        Reach us for account setup help, car listing questions, or support related to partner bookings.
+      </p>
+
+      <div class="mt-6 space-y-4 text-sm text-owner-primary">
+        <div class="flex items-start gap-3">
+          <fa-icon [icon]="faLocationArrow" class="w-5 h-5 text-owner-accent mt-1"></fa-icon>
+          <span>
+            <strong>Address:</strong><br />
+            Car2Go Headquarters,<br />
+            Surat, Gujarat
+          </span>
+        </div>
+        <div class="flex items-start gap-3">
+          <fa-icon [icon]="faPhone" class="w-5 h-5 text-owner-accent mt-1"></fa-icon>
+          <span>
+            <strong>Phone:</strong><br />
+            +91 98765 43210
+          </span>
+        </div>
+        <div class="flex items-start gap-3">
+          <fa-icon [icon]="faEnvelope" class="w-5 h-5 text-owner-accent mt-1"></fa-icon>
+          <span>
+            <strong>Email:</strong><br />
+            car2gosupports@gmail.com
+          </span>
+        </div>
+        <div class="flex items-start gap-3">
+          <fa-icon [icon]="faClock" class="w-5 h-5 text-owner-accent mt-1"></fa-icon>
+          <span>
+            <strong>Support Hours:</strong><br />
+            24/7 Partner Assistance
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT FORM -->
+    <div class="bg-white border border-gray-200 rounded-xl p-6 hover-lift animate-fade-up">
+      <h3 class="text-xl font-semibold text-owner-primary mb-6">
+        Have a Query or Need Assistance?
+      </h3>
+
+      <form class="space-y-5" (ngSubmit)="submitMessage()" #ownerContactForm="ngForm">
+        <div>
+          <label for="ownerContactName" class="text-sm font-medium">
+            Full Name <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="ownerContactName"
+            type="text"
+            [(ngModel)]="name"
+            name="name"
+            autocomplete="name"
+            required
+            placeholder="Rohit Sharma"
+            class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-owner-accent focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label for="ownerContactEmail" class="text-sm font-medium">
+            Email Address <span class="text-red-500">*</span>
+          </label>
+          <input
+            id="ownerContactEmail"
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            autocomplete="email"
+            required
+            placeholder="partner@example.com"
+            class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-owner-accent focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label for="ownerContactPhone" class="text-sm font-medium">
+            Phone Number (Optional)
+          </label>
+          <input
+            id="ownerContactPhone"
+            type="tel"
+            [(ngModel)]="phone"
+            name="phone"
+            autocomplete="tel"
+            pattern="[0-9]{10}"
+            minlength="10"
+            maxlength="10"
+            inputmode="numeric"
+            placeholder="9876543210"
+            class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-owner-accent focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label for="ownerContactSubject" class="text-sm font-medium">
+            Subject
+          </label>
+          <select
+            id="ownerContactSubject"
+            [(ngModel)]="subject"
+            name="subject"
+            autocomplete="off"
+            class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-owner-accent focus:outline-none"
+          >
+            <option value="">Select Subject</option>
+            <option value="Listing Support">Listing Support</option>
+            <option value="Booking Support">Booking Support</option>
+            <option value="Payout Query">Payout Query</option>
+            <option value="General Inquiry">General Inquiry</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="ownerContactMessage" class="text-sm font-medium">
+            Message <span class="text-red-500">*</span>
+          </label>
+          <textarea
+            id="ownerContactMessage"
+            [(ngModel)]="message"
+            name="message"
+            autocomplete="off"
+            required
+            rows="4"
+            placeholder="Write your message here..."
+            class="w-full mt-1 border rounded-md px-3 py-3 text-sm focus:ring-2 focus:ring-owner-accent focus:outline-none"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="ownerContactForm.invalid"
+          class="w-full bg-owner-accent text-white py-3 rounded-md text-sm font-medium hover:opacity-90 disabled:opacity-50 transition btn-animate"
+        >
+          Send Message
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="bg-owner-primary text-white animate-fade">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold">
+      Need to Manage Your Partner Account?
+    </h2>
+
+    <p class="mt-4 opacity-80 max-w-2xl mx-auto">
+      Use your partner panel to track listings, requests, and updates in one place.
+    </p>
+
+    <div class="mt-6">
+      <a
+        [routerLink]="ctaButtonLink"
+        class="bg-owner-accent text-white px-8 py-3 rounded-md text-sm font-medium btn-animate"
+      >
+        {{ ctaButtonText }}
+      </a>
+    </div>
+  </div>
+</section>

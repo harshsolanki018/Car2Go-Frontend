@@ -1,0 +1,525 @@
+<!-- PAGE HEADER -->
+<section class="bg-owner-background border-b animate-fade-up">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <h1 class="text-2xl sm:text-3xl font-bold text-owner-primary">
+      My Cars
+    </h1>
+    <p class="mt-2 text-owner-muted text-sm">
+      Add and manage the cars listed under your partner account.
+    </p>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section class="bg-owner-background animate-fade-up">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div class="relative w-full sm:w-96">
+        <label for="ownerCarsSearch" class="sr-only">Search cars</label>
+        <fa-icon
+          [icon]="faMagnifyingGlass"
+          class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"
+        ></fa-icon>
+        <input
+          id="ownerCarsSearch"
+          type="text"
+          [(ngModel)]="searchText"
+          autocomplete="off"
+          placeholder="Search by Car ID, Number or Name..."
+          class="w-full border rounded-md pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-owner-accent"
+        />
+      </div>
+
+      <button
+        (click)="openAddModal()"
+        class="px-4 py-2 bg-owner-accent text-white rounded-md text-sm font-medium hover:opacity-90"
+      >
+        + Add New Car
+      </button>
+    </div>
+
+    <div *ngIf="filteredCars.length === 0" class="text-center text-owner-muted py-10">
+      No cars found. Add your first car to get started.
+    </div>
+
+    <div *ngIf="filteredCars.length > 0" class="space-y-6">
+      <div
+        *ngFor="let car of filteredCars"
+        class="bg-white border rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer"
+        (click)="openCarDetails(car)"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
+          <div class="flex justify-center lg:justify-start">
+            <img
+              [src]="(car.image | secureUrl) || 'https://via.placeholder.com/300x200'"
+              class="w-[240px] h-[160px] object-cover rounded-lg"
+              [alt]="car.name"
+            />
+          </div>
+
+          <div class="lg:col-span-2">
+            <div class="text-xs text-gray-500 font-mono">
+              ID: {{ car.id }} | Reg: {{ car.carNumber }}
+            </div>
+            <h3 class="mt-2 text-lg font-semibold text-owner-primary">
+              {{ car.name }}
+            </h3>
+
+            <div class="mt-3 text-sm text-owner-muted space-y-1">
+              <p>
+                Location:
+                <span class="font-medium text-owner-primary">{{ car.location }}</span>
+              </p>
+              <p>
+                Specs:
+                <span class="font-medium text-owner-primary">
+                  {{ car.fuelType }} | {{ car.transmission }} | {{ car.seats }} seats
+                </span>
+              </p>
+              <p>
+                Price: 
+                <span class="font-medium text-owner-primary">
+                  Rs. {{ car.pricePerDay }} / day
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-end gap-4">
+            <span
+              class="text-xs px-4 py-2 rounded-full font-medium"
+              [ngClass]="{
+                'bg-green-100 text-green-700': car.status === 'Approved',
+                'bg-yellow-100 text-yellow-700': car.status === 'Pending',
+                'bg-red-100 text-red-700': car.status === 'Rejected',
+                'bg-gray-200 text-gray-700': car.status === 'Blocked'
+              }"
+            >
+              {{ car.status }}
+            </span>
+
+            <div class="flex flex-wrap justify-end gap-2">
+              <button
+                (click)="editCarById(car.id); $event.stopPropagation()"
+                class="px-3 py-1 text-xs bg-gray-700 text-white rounded hover:bg-gray-800"
+              >
+                Edit
+              </button>
+              <button
+                (click)="safeDelete(car); $event.stopPropagation()"
+                class="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div
+  *ngIf="selectedCar as car"
+  class="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 px-4"
+  (click)="closeCarDetails()"
+>
+  <div
+    class="w-full max-w-4xl rounded-2xl bg-white shadow-xl"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="flex items-center justify-between border-b px-6 py-4">
+      <div>
+        <p class="text-xs font-semibold tracking-wide uppercase text-owner-accent">Car Details</p>
+        <h3 class="text-lg font-semibold text-owner-primary">
+          {{ car.name }}
+          
+        </h3>
+        <div class="mb-4 flex flex-wrap gap-3 text-xs text-gray-500 font-mono">
+          <span>ID: {{ car.id }}</span>
+          <span>Reg: {{ car.carNumber }}</span>
+          <span>Status: {{ car.status }}</span>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="text-sm text-owner-muted hover:text-owner-primary"
+        (click)="closeCarDetails()"
+      >
+        Close
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+      <div>
+        
+        <img
+          [src]="(car.image | secureUrl) || 'https://via.placeholder.com/600x400'"
+          class="w-full h-64 object-cover rounded-xl"
+          [alt]="car.name || 'Car image'"
+        />
+      </div>
+
+      <div class="space-y-5 text-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <p class="text-xs uppercase font-semibold text-owner-muted">Owner Name</p>
+            <p class="mt-1 text-owner-primary">{{ car.ownerName }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase font-semibold text-owner-muted">Owner Contact</p>
+            <p class="mt-1 text-owner-primary">{{ car.ownerContact }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase font-semibold text-owner-muted">Owner Email</p>
+            <p class="mt-1 text-owner-primary">{{ car.ownerEmail }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase font-semibold text-owner-muted">Location</p>
+            <p class="mt-1 text-owner-primary">{{ car.location }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <p class="text-xs uppercase font-semibold text-owner-muted">Fuel Type</p>
+            <p class="mt-1 text-owner-primary">{{ car.fuelType }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase font-semibold text-owner-muted">Transmission</p>
+            <p class="mt-1 text-owner-primary">{{ car.transmission }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase font-semibold text-owner-muted">Seats</p>
+            <p class="mt-1 text-owner-primary">{{ car.seats }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase font-semibold text-owner-muted">Price / Day</p>
+            <p class="mt-1 text-owner-primary">Rs. {{ car.pricePerDay }}</p>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-xs uppercase font-semibold text-owner-muted">Description</p>
+          <p class="mt-1 text-owner-primary">{{ car.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div *ngIf="showAddModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <form
+    #carForm="ngForm"
+    (ngSubmit)="saveCar(carForm)"
+    class="bg-white w-full max-w-2xl rounded-xl p-6 overflow-y-auto max-h-[90vh]"
+  >
+    <h3 class="text-xl font-semibold text-owner-primary">
+      {{ isEditMode ? 'Edit Car' : 'Add New Car' }}
+    </h3>
+
+    <h4 class="font-medium mb-3 mt-6">
+      <fa-icon [icon]="faUser"></fa-icon> Owner Details
+    </h4>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2">
+      <label for="ownerCarOwnerName" class="sr-only">Owner Name</label>
+      <input
+        id="ownerCarOwnerName"
+        type="text"
+        name="ownerName"
+        [(ngModel)]="newCar.ownerName"
+        autocomplete="name"
+        required
+        [readonly]="!!ownerProfile.name"
+        placeholder="Owner Name"
+        class="border rounded-md px-3 py-2 text-sm"
+      />
+
+      <label for="ownerCarOwnerContact" class="sr-only">Owner Contact Number</label>
+      <input
+        id="ownerCarOwnerContact"
+        type="tel"
+        name="ownerContact"
+        [(ngModel)]="newCar.ownerContact"
+        autocomplete="tel"
+        required
+        [readonly]="!!ownerProfile.phone"
+        pattern="[0-9]{10}"
+        minlength="10"
+        maxlength="10"
+        inputmode="numeric"
+        placeholder="Contact Number"
+        class="border rounded-md px-3 py-2 text-sm"
+      />
+
+      <label for="ownerCarOwnerEmail" class="sr-only">Owner Email</label>
+      <input
+        id="ownerCarOwnerEmail"
+        type="email"
+        name="ownerEmail"
+        [(ngModel)]="newCar.ownerEmail"
+        autocomplete="email"
+        required
+        [readonly]="!!ownerProfile.email"
+        placeholder="Email Address"
+        class="border rounded-md px-3 py-2 text-sm sm:col-span-2"
+      />
+    </div>
+    <p class="mb-6 text-xs text-owner-muted">
+      Owner details are pulled from your profile and cannot be edited here.
+    </p>
+
+    <h4 class="font-medium mb-3">
+      <fa-icon [icon]="faCar"></fa-icon> Car Basic Information
+    </h4>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <label for="ownerCarName" class="sr-only">Car Name</label>
+      <input
+        id="ownerCarName"
+        type="text"
+        name="carName"
+        [(ngModel)]="newCar.name"
+        autocomplete="off"
+        required
+        [readonly]="isEditMode"
+        placeholder="Car Name"
+        class="border rounded-md px-3 py-2 text-sm"
+      />
+
+      <label for="ownerCarNumber" class="sr-only">Registration Number</label>
+      <input
+        id="ownerCarNumber"
+        type="text"
+        name="carNumber"
+        [(ngModel)]="newCar.carNumber"
+        autocomplete="off"
+        required
+        [readonly]="isEditMode"
+        minlength="10"
+        maxlength="10"
+        pattern="[A-Za-z]{2}[0-9]{2}[A-Za-z]{2}[0-9]{4}"
+        placeholder="Registration Number (GJ05VK1818)"
+        class="border rounded-md px-3 py-2 text-sm"
+      />
+
+      <div class="border-2 border-dashed rounded-xl p-5 text-center relative sm:col-span-2">
+        <label for="ownerCarImage" class="sr-only">Upload car image</label>
+        <input
+          id="ownerCarImage"
+          type="file"
+          accept="image/*"
+          autocomplete="off"
+          (change)="onImageSelect($event)"
+          class="absolute inset-0 opacity-0 cursor-pointer"
+        />
+        <div *ngIf="!newCar.image">
+          <div class="text-3xl mb-2"><fa-icon [icon]="faImage"></fa-icon></div>
+          <p class="text-sm text-gray-600">Click to upload car image</p>
+          <p class="text-xs text-gray-400 mt-1">JPG, PNG (max 2MB)</p>
+        </div>
+        <img
+          *ngIf="newCar.image"
+          [src]="newCar.image"
+          class="mx-auto h-32 rounded-lg object-cover"
+        />
+      </div>
+
+    </div>
+
+    <h4 class="font-medium mb-3">
+      <fa-icon [icon]="faImage"></fa-icon> Ownership Documents
+    </h4>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div class="border-2 border-dashed rounded-xl p-5 text-center relative">
+        <label for="ownerCarRcBook" class="sr-only">Upload RC book image</label>
+        <input
+          id="ownerCarRcBook"
+          type="file"
+          accept="image/*"
+          autocomplete="off"
+          (change)="onRcBookSelect($event)"
+          class="absolute inset-0 opacity-0 cursor-pointer"
+        />
+        <div *ngIf="!newCar.rcBookImage">
+          <div class="text-3xl mb-2"><fa-icon [icon]="faImage"></fa-icon></div>
+          <p class="text-sm text-gray-600">Upload RC book image</p>
+          <p class="text-xs text-gray-400 mt-1">JPG, PNG (max 2MB)</p>
+        </div>
+        <img
+          *ngIf="newCar.rcBookImage"
+          [src]="newCar.rcBookImage"
+          class="mx-auto h-28 rounded-lg object-cover"
+        />
+      </div>
+
+      <div class="border-2 border-dashed rounded-xl p-5 text-center relative">
+        <label for="ownerCarPuc" class="sr-only">Upload PUC certificate image</label>
+        <input
+          id="ownerCarPuc"
+          type="file"
+          accept="image/*"
+          autocomplete="off"
+          (change)="onPucSelect($event)"
+          class="absolute inset-0 opacity-0 cursor-pointer"
+        />
+        <div *ngIf="!newCar.pucCertificateImage">
+          <div class="text-3xl mb-2"><fa-icon [icon]="faImage"></fa-icon></div>
+          <p class="text-sm text-gray-600">Upload PUC certificate image</p>
+          <p class="text-xs text-gray-400 mt-1">JPG, PNG (max 2MB)</p>
+        </div>
+        <img
+          *ngIf="newCar.pucCertificateImage"
+          [src]="newCar.pucCertificateImage"
+          class="mx-auto h-28 rounded-lg object-cover"
+        />
+      </div>
+    </div>
+
+    <h4 class="font-medium mb-3">
+      <fa-icon [icon]="faMapPin"></fa-icon> Availability
+    </h4>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div>
+        <label for="ownerCarState" class="sr-only">State</label>
+        <input
+          id="ownerCarState"
+          type="text"
+          name="state"
+          [(ngModel)]="newCar.state"
+          autocomplete="off"
+          required
+          placeholder="State (e.g., Gujarat)"
+          class="border rounded-md px-3 py-2 text-sm w-full"
+        />
+      </div>
+      <div>
+        <label for="ownerCarCity" class="sr-only">City</label>
+        <input
+          id="ownerCarCity"
+          type="text"
+          name="city"
+          [(ngModel)]="newCar.city"
+          autocomplete="off"
+          required
+          placeholder="City (e.g., Surat)"
+          class="border rounded-md px-3 py-2 text-sm w-full"
+        />
+      </div>
+      <div>
+        <label for="ownerCarArea" class="sr-only">Area</label>
+        <input
+          id="ownerCarArea"
+          type="text"
+          name="area"
+          [(ngModel)]="newCar.area"
+          autocomplete="off"
+          required
+          placeholder="Area (e.g., Amroli)"
+          class="border rounded-md px-3 py-2 text-sm w-full"
+        />
+      </div>
+    </div>
+    <h4 class="font-medium mb-3">
+      <fa-icon [icon]="faGear"></fa-icon> Car Specifications
+    </h4>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <label for="ownerCarFuelType" class="sr-only">Fuel type</label>
+      <select
+        id="ownerCarFuelType"
+        name="fuelType"
+        [(ngModel)]="newCar.fuelType"
+        autocomplete="off"
+        required
+        class="border rounded-md px-3 py-2 text-sm"
+      >
+        <option>Petrol</option>
+        <option>Diesel</option>
+        <option>Electric</option>
+      </select>
+
+      <label for="ownerCarTransmission" class="sr-only">Transmission</label>
+      <select
+        id="ownerCarTransmission"
+        name="transmission"
+        [(ngModel)]="newCar.transmission"
+        autocomplete="off"
+        required
+        class="border rounded-md px-3 py-2 text-sm"
+      >
+        <option>Manual</option>
+        <option>Automatic</option>
+      </select>
+
+      <label for="ownerCarSeats" class="sr-only">Number of seats</label>
+      <input
+        id="ownerCarSeats"
+        type="number"
+        name="seats"
+        [(ngModel)]="newCar.seats"
+        autocomplete="off"
+        required
+        min="2"
+        max="20"
+        placeholder="Seats"
+        class="border rounded-md px-3 py-2 text-sm"
+      />
+    </div>
+    <h4 class="font-medium mb-3">
+      <fa-icon [icon]="faSackDollar"></fa-icon> Pricing & Description
+    </h4>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div>
+        <label for="ownerCarPrice" class="sr-only">Price per day</label>
+        <input
+          id="ownerCarPrice"
+          type="number"
+          name="pricePerDay"
+          [(ngModel)]="newCar.pricePerDay"
+          autocomplete="off"
+          required
+          min="1"
+          placeholder="Price per day"
+          class="border rounded-md px-3 py-2 text-sm w-full"
+        />
+      </div>
+      <div class="sm:col-span-2">
+        <label for="ownerCarDescription" class="sr-only">Description</label>
+        <textarea
+          id="ownerCarDescription"
+          name="description"
+          [(ngModel)]="newCar.description"
+          autocomplete="off"
+          required
+          maxlength="300"
+          rows="4"
+          placeholder="Describe the car condition, features, and any notes..."
+          class="border rounded-md px-3 py-2 text-sm w-full"
+        ></textarea>
+        <div class="mt-1 text-xs text-owner-muted text-right">
+          {{ newCar.description.length }} / 300
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex flex-wrap justify-end gap-3 border-t pt-4">
+      <button
+        type="button"
+        (click)="closeModal()"
+        class="rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-50"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        [disabled]="isSaving"
+        class="rounded-md bg-owner-accent px-4 py-2 text-sm text-white hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {{ isSaving ? (isEditMode ? 'Saving changes...' : 'Adding...') : (isEditMode ? 'Save Changes' : 'Add Car') }}
+      </button>
+    </div>
+  </form>
+</div>
+
+
+

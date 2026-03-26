@@ -1,0 +1,99 @@
+<h2 class="text-2xl font-semibold mb-8">
+  {{ pageTitle }}
+</h2>
+
+<div class="bg-white p-6 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row gap-4 justify-between">
+  <label for="adminUsersSearch" class="sr-only">
+    Search users
+  </label>
+  <div class="relative w-full md:w-1/3">
+    <fa-icon
+      [icon]="faMagnifyingGlass"
+      class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"
+    ></fa-icon>
+    <input
+      id="adminUsersSearch"
+      type="text"
+      [(ngModel)]="searchText"
+      autocomplete="off"
+      placeholder="Search by user id, name, or email..."
+      class="border rounded-md pl-9 pr-4 py-2 text-sm w-full"
+    />
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm overflow-x-auto">
+
+  <table class="w-full text-sm border-collapse">
+    <thead class="bg-gray-50 border-b">
+      <tr>
+        <th class="px-6 py-4 text-left w-[14%]">User ID</th>
+        <th class="px-6 py-4 text-left w-[18%]">User Name</th>
+        <th class="px-6 py-4 text-left w-[22%]">Email</th>
+        <th class="px-6 py-4 text-center w-[10%]">Role</th>
+        <th class="px-6 py-4 text-center w-[14%]">Join Date</th>
+        <th class="px-6 py-4 text-center w-[14%]">Last Login</th>
+        <th class="px-6 py-4 text-right w-[8%]">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        *ngFor="let user of filteredUsers"
+        class="border-b hover:bg-gray-50"
+      >
+
+        <td class="px-6 py-4 font-mono text-xs text-gray-600">
+          {{ user.id }}
+        </td>
+
+        <td class="px-6 py-4">
+          {{ user.name }}
+        </td>
+
+        <td class="px-6 py-4">
+          {{ user.email }}
+        </td>
+
+        <td class="px-6 py-4 text-center">
+          <span class="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700">
+            {{ user.role }}
+          </span>
+        </td>
+
+        <td class="px-6 py-4 text-center text-xs text-gray-500">
+          {{ user.joinDate | date:'mediumDate' }}
+        </td>
+
+        <td class="px-6 py-4 text-center text-xs text-gray-500">
+          {{ user.lastLogin ? (user.lastLogin | date:'short') : 'Never' }}
+        </td>
+
+        <td class="px-6 py-4 text-right space-x-2">
+
+          <button
+            (click)="toggleBlock(user)"
+            class="px-3 py-1 text-xs rounded text-white"
+            [ngClass]="{
+              'bg-yellow-600 hover:bg-yellow-700': !user.blocked,
+              'bg-green-600 hover:bg-green-700': user.blocked
+            }"
+          >
+            {{ user.blocked ? 'Unblock' : 'Block' }}
+            
+          </button>
+
+          <button
+            (click)="deleteUser(user.email)"
+            class="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+          >
+            Delete
+          </button>
+
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+
+</div>

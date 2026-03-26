@@ -1,0 +1,72 @@
+<section class="min-h-screen flex items-center justify-center bg-owner-background animate-fade-up">
+  <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-sm border border-gray-200 animate-fade">
+    <h2 class="text-2xl font-bold text-owner-primary text-center">
+      Partner Login
+    </h2>
+
+    <p class="text-sm text-owner-muted text-center mt-2">
+      Welcome back! Sign in to your partner account.
+    </p>
+
+    <form (ngSubmit)="login()" #ownerLoginForm="ngForm" class="mt-6 space-y-4">
+      <div>
+        <label for="ownerLoginEmail" class="text-sm font-medium text-owner-primary">Email</label>
+        <input
+          id="ownerLoginEmail"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          autocomplete="email"
+          required
+          class="w-full mt-1 border rounded-md px-3 py-3 text-sm"
+          placeholder="Partner@example.com"
+        />
+      </div>
+
+      <div>
+        <label for="ownerLoginPassword" class="text-sm font-medium text-owner-primary">Password</label>
+        <div class="relative">
+          <input
+            id="ownerLoginPassword"
+            [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="password"
+            name="password"
+            autocomplete="current-password"
+            required
+            class="w-full mt-1 border rounded-md px-3 py-3 pr-10 text-sm"
+            placeholder="********"
+          />
+          <button
+            type="button"
+            (click)="showPassword = !showPassword"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-owner-muted"
+          >
+            <fa-icon [icon]="showPassword ? faEye : faEyeSlash"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="ownerLoginForm.invalid"
+        class="w-full bg-owner-accent text-white py-3 rounded-md text-sm font-medium btn-animate"
+      >
+        Login as Partner
+      </button>
+    </form>
+
+    <p class="text-xs text-right mt-2">
+      <a routerLink="/owner-forgot-password" class="text-owner-accent font-medium">
+        Forgot password?
+      </a>
+    </p>
+
+    <p class="text-sm text-center text-owner-muted mt-6">
+      New to Car2Go Partners?
+      <a routerLink="/owner-register" class="text-owner-accent font-medium">
+        Create Partner Account
+      </a>
+    </p>
+
+  </div>
+</section>

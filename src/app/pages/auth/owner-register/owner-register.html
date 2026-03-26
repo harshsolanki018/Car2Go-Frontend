@@ -1,0 +1,165 @@
+<section class="min-h-screen flex items-center justify-center bg-owner-background animate-fade-up">
+  <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-sm border border-gray-200 animate-fade">
+    <h2 class="text-2xl font-bold text-owner-primary text-center">
+      Partner Registration
+    </h2>
+
+    <p class="text-sm text-owner-muted text-center mt-2">
+      Create your Car2Go Partners account.
+    </p>
+
+    <form class="mt-6 space-y-4" (ngSubmit)="register()" #ownerRegisterForm="ngForm">
+      <div>
+        <label for="ownerRegisterName" class="text-sm font-medium text-owner-primary">Full Name</label>
+        <input
+          id="ownerRegisterName"
+          type="text"
+          [(ngModel)]="name"
+          name="name"
+          [disabled]="otpSent"
+          autocomplete="name"
+          required
+          class="w-full mt-1 border rounded-md px-3 py-3 text-sm"
+          placeholder="Rohit Sharma"
+        />
+      </div>
+
+      <div>
+        <label for="ownerRegisterEmail" class="text-sm font-medium text-owner-primary">Email</label>
+        <input
+          id="ownerRegisterEmail"
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          [disabled]="otpSent"
+          autocomplete="email"
+          required
+          class="w-full mt-1 border rounded-md px-3 py-3 text-sm"
+          placeholder="partner@example.com"
+        />
+      </div>
+
+      <div>
+        <label for="ownerRegisterPhone" class="text-sm font-medium text-owner-primary">Phone Number</label>
+        <input
+          id="ownerRegisterPhone"
+          type="tel"
+          [(ngModel)]="phone"
+          name="phone"
+          [disabled]="otpSent"
+          autocomplete="tel"
+          required
+          pattern="[0-9]{10}"
+          minlength="10"
+          maxlength="10"
+          inputmode="numeric"
+          class="w-full mt-1 border rounded-md px-3 py-3 text-sm"
+          placeholder="9876543210"
+        />
+      </div>
+
+      <div>
+        <label for="ownerRegisterPassword" class="text-sm font-medium text-owner-primary">Password</label>
+        <div class="relative">
+          <input
+            id="ownerRegisterPassword"
+            [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="password"
+            name="password"
+            [disabled]="otpSent"
+            autocomplete="new-password"
+            required
+            minlength="8"
+            class="w-full mt-1 border rounded-md px-3 py-3 pr-10 text-sm"
+            placeholder="Min 8 with Aa1@"
+          />
+          <button
+            type="button"
+            (click)="showPassword = !showPassword"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-owner-muted"
+          >
+            <fa-icon [icon]="showPassword ? faEye : faEyeSlash"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <label for="ownerRegisterConfirmPassword" class="text-sm font-medium text-owner-primary">Confirm Password</label>
+        <div class="relative">
+          <input
+            id="ownerRegisterConfirmPassword"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            [disabled]="otpSent"
+            autocomplete="new-password"
+            required
+            class="w-full mt-1 border rounded-md px-3 py-3 pr-10 text-sm"
+            placeholder="Re-enter password"
+          />
+          <button
+            type="button"
+            (click)="showConfirmPassword = !showConfirmPassword"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-owner-muted"
+          >
+            <fa-icon [icon]="showConfirmPassword ? faEye : faEyeSlash"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="otpSent">
+        <label for="ownerRegisterOtp" class="text-sm font-medium text-owner-primary">OTP</label>
+        <input
+          id="ownerRegisterOtp"
+          type="text"
+          [(ngModel)]="otp"
+          name="otp"
+          required
+          class="w-full mt-1 border rounded-md px-3 py-3 text-sm"
+          placeholder="Enter OTP"
+        />
+        <button
+          type="button"
+          (click)="resendOtp()"
+          [disabled]="isSubmitting || resendCountdown > 0"
+          class="mt-2 text-xs text-owner-accent font-semibold disabled:opacity-50"
+        >
+          {{ resendCountdown > 0 ? ('Resend OTP in ' + resendCountdown + 's') : 'Resend OTP' }}
+        </button>
+      </div>
+
+      <div class="flex items-start gap-2 text-sm">
+        <input
+          id="ownerRegisterAcceptTerms"
+          type="checkbox"
+          [(ngModel)]="acceptTerms"
+          name="acceptTerms"
+          [disabled]="otpSent"
+          autocomplete="off"
+          required
+          class="mt-1"
+        />
+        <label for="ownerRegisterAcceptTerms" class="text-owner-muted">
+          I agree to the
+          <span class="text-owner-accent font-medium cursor-pointer">Terms & Conditions</span>
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="ownerRegisterForm.invalid || isVerifying || isSubmitting"
+        class="w-full bg-owner-accent text-white py-3 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed btn-animate"
+      >
+        {{ otpSent ? 'Verify OTP' : 'Register as Partner' }}
+      </button>
+    </form>
+
+    <p class="text-sm text-center text-owner-muted mt-6">
+      Already a partner?
+      <a routerLink="/owner-login" class="text-owner-accent font-medium">
+        Partner Login
+      </a>
+    </p>
+
+  </div>
+</section>
