@@ -18,7 +18,6 @@ interface AuthResult {
   requiresOtp?: boolean;
   remainingResends?: number;
   retryAfterSeconds?: number;
-  debugOtp?: string;
 }
 
 @Injectable({
@@ -111,7 +110,7 @@ export class AuthService {
     role?: string;
   }): Promise<AuthResult> {
     try {
-      const response = await this.api.post<{ retryAfterSeconds?: number; otp?: string }>(
+      const response = await this.api.post<{ retryAfterSeconds?: number }>(
         '/auth/register',
         {
           name: userData.name.trim(),
@@ -127,7 +126,6 @@ export class AuthService {
         message: response.message || 'OTP sent to your email.',
         requiresOtp: true,
         retryAfterSeconds: response.data?.retryAfterSeconds,
-        debugOtp: response.data?.otp,
       };
     } catch (error) {
       return {
@@ -173,7 +171,7 @@ export class AuthService {
     role?: string;
   }): Promise<AuthResult> {
     try {
-      const response = await this.api.post<{ retryAfterSeconds?: number; otp?: string }>(
+      const response = await this.api.post<{ retryAfterSeconds?: number }>(
         '/auth/resend-otp',
         {
         name: payload.name?.trim(),
@@ -186,7 +184,6 @@ export class AuthService {
         success: true,
         message: response.message || 'OTP resent.',
         retryAfterSeconds: response.data?.retryAfterSeconds,
-        debugOtp: response.data?.otp,
       };
     } catch (error) {
       return {
@@ -198,18 +195,14 @@ export class AuthService {
 
   async forgotPassword(email: string, role?: string): Promise<AuthResult> {
     try {
-      const response = await this.api.post<{ retryAfterSeconds?: number; otp?: string }>(
-        '/auth/forgot-password',
-        {
+      const response = await this.api.post<any>('/auth/forgot-password', {
         email: email.toLowerCase().trim(),
         role: role?.trim(),
-        }
-      );
+      });
       return {
         success: true,
         message: response.message || 'OTP sent to your email.',
         retryAfterSeconds: response.data?.retryAfterSeconds,
-        debugOtp: response.data?.otp,
       };
     } catch (error) {
       return {

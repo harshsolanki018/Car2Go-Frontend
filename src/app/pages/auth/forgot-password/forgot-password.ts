@@ -70,9 +70,6 @@ export class ForgotPassword implements OnDestroy {
         return;
       }
       this.otpSent = true;
-      if (result.debugOtp) {
-        this.otp = result.debugOtp;
-      }
       this.startResendCountdown(result.retryAfterSeconds ?? 60);
       this.flash.showSuccess(result.message);
     } finally {
