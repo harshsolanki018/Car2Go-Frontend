@@ -11,18 +11,20 @@ export function buildDownloadUrl(url: string, filename?: string): string {
     return '';
   }
 
-  if (trimmed.startsWith('data:')) {
-    return trimmed;
+  const normalized = trimmed.startsWith('http://') ? `https://${trimmed.slice(7)}` : trimmed;
+
+  if (normalized.startsWith('data:')) {
+    return normalized;
   }
 
-  if (!trimmed.includes('res.cloudinary.com') || !trimmed.includes('/upload/')) {
-    return trimmed;
+  if (!normalized.includes('res.cloudinary.com') || !normalized.includes('/upload/')) {
+    return normalized;
   }
 
-  const [base, query] = trimmed.split('?');
+  const [base, query] = normalized.split('?');
   const split = base.split('/upload/');
   if (split.length !== 2) {
-    return trimmed;
+    return normalized;
   }
 
   const safeName = sanitizeFilename(filename);
