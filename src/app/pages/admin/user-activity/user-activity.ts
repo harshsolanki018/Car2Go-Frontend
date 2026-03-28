@@ -78,7 +78,7 @@ export class UserActivity implements OnInit {
     return {
       totalBookings: userBookings.length,
       completedBookings: completedBookings.length,
-      totalSpent,
+      totalSpent: Math.round(totalSpent),
       ratingCount,
       ratingAvg: Number(ratingAvg.toFixed(1)),
     };
