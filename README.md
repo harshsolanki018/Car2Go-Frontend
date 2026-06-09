@@ -2,8 +2,6 @@
 
 Frontend application for Car2Go – a modern car rental platform that enables users to browse vehicles, make bookings, manage rentals, and track booking history through an intuitive and responsive interface.
 
-Live Demo: https://car2goweb.netlify.app/
-
 ---
 
 ## Overview
@@ -11,7 +9,9 @@ Live Demo: https://car2goweb.netlify.app/
 Car2Go Frontend is built using Angular and Tailwind CSS, providing a fast, responsive, and user-friendly experience. The application allows customers to search vehicles, view detailed information, upload required documents, complete bookings, and track rental status in real time.
 
 ---
-
+## Live Links
+- API Base: https://api.car2go.free.je
+- Frontend: https://app.car2go.free.je
 ## Features
 
 ### Authentication
