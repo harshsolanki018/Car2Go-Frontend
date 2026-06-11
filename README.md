@@ -12,6 +12,7 @@ Car2Go Frontend is built using Angular and Tailwind CSS, providing a fast, respo
 ## Live Links
 - API Base: https://api.car2go.free.je
 - Frontend: https://app.car2go.free.je
+- Note: please wait for some time after open live link, thank you.
 ## Features
 
 ### Authentication
